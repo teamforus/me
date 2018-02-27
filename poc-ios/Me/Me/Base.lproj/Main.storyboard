@@ -175,7 +175,7 @@
         <!--Identity-->
         <scene sceneID="WG3-ag-CIK">
             <objects>
-                <viewController id="KXS-7o-wTm" sceneMemberID="viewController">
+                <viewController id="KXS-7o-wTm" customClass="IdentityViewController" customModule="Me" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9qM-tl-m4w">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -186,10 +186,20 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KjE-Dv-gHD">
+                                <rect key="frame" x="320" y="20" width="39" height="30"/>
+                                <state key="normal" title="Close"/>
+                                <connections>
+                                    <action selector="exit:" destination="KXS-7o-wTm" eventType="touchUpInside" id="PSN-3g-DvX"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="mmN-fn-NLZ" firstAttribute="centerX" secondItem="vf3-Lj-Tof" secondAttribute="centerX" id="H8g-28-yBj"/>
+                            <constraint firstItem="vf3-Lj-Tof" firstAttribute="trailing" secondItem="KjE-Dv-gHD" secondAttribute="trailing" constant="16" id="JPY-eo-IQf"/>
+                            <constraint firstItem="KjE-Dv-gHD" firstAttribute="top" secondItem="vf3-Lj-Tof" secondAttribute="top" id="Jvy-5H-tlL"/>
+                            <constraint firstItem="KjE-Dv-gHD" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9qM-tl-m4w" secondAttribute="leading" constant="20" symbolic="YES" id="sLh-vC-prz"/>
                             <constraint firstItem="mmN-fn-NLZ" firstAttribute="centerY" secondItem="vf3-Lj-Tof" secondAttribute="centerY" id="v50-fa-ung"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="vf3-Lj-Tof"/>
