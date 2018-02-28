@@ -60,17 +60,19 @@ class IdentityViewController: UIViewController, QRCodeReaderViewControllerDelega
     
     lazy var reader: QRCodeReader = QRCodeReader()
     func reader(_ reader: QRCodeReaderViewController, didScanResult result: QRCodeReaderResult) {
-        reader.stopScanning()
-        
-        dismiss(animated: true) { [weak self] in
-//            self?.model?.scanResult = result.value
-        }
+        print("yo1")
+//        reader.stopScanning()
+//
+//        dismiss(animated: true) { [weak self] in
+////            self?.model?.scanResult = result.value
+//        }
     }
     
     func readerDidCancel(_ reader: QRCodeReaderViewController) {
-        reader.stopScanning()
+        print("yo2")
+//        reader.stopScanning()
         
-        dismiss(animated: true, completion: nil)
+//        dismiss(animated: true, completion: nil)
     }
     
     func loadScanner() {
@@ -82,6 +84,7 @@ class IdentityViewController: UIViewController, QRCodeReaderViewControllerDelega
         reader.startScanning()
         reader.didFindCode = { result in
             print(result.value)
+            self.reader.startScanning()
         }
     }
     
