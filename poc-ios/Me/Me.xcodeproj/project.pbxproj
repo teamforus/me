@@ -79,6 +79,7 @@
 		895DA09C20414F4C00AF4C99 /* Me */ = {
 			isa = PBXGroup;
 			children = (
+				895DA0A120414F4C00AF4C99 /* Main.storyboard */,
 				895DA09D20414F4C00AF4C99 /* AppDelegate.swift */,
 				894B3D2D2045A3F2009020D3 /* MainViewController.swift */,
 				894B3D272045A113009020D3 /* WalletViewController.swift */,
@@ -86,7 +87,6 @@
 				894B3D2F2045A668009020D3 /* GlobalFunctions.swift */,
 				894B3D2B2045A2B2009020D3 /* IdentityView.swift */,
 				894B3D312045AAE0009020D3 /* IdentityViewController.swift */,
-				895DA0A120414F4C00AF4C99 /* Main.storyboard */,
 				895DA0A420414F4C00AF4C99 /* Assets.xcassets */,
 				895DA0A620414F4C00AF4C99 /* LaunchScreen.storyboard */,
 				895DA0A920414F4C00AF4C99 /* Info.plist */,

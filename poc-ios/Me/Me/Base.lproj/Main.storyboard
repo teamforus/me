@@ -87,7 +87,7 @@
                                 <rect key="frame" x="149.5" y="592" width="75" height="75"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="qr" translatesAutoresizingMaskIntoConstraints="NO" id="qNl-mt-W0u">
-                                        <rect key="frame" x="4" y="4" width="67" height="67"/>
+                                        <rect key="frame" x="1" y="1" width="73" height="73"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </imageView>
                                 </subviews>
@@ -96,9 +96,9 @@
                                     <constraint firstItem="qNl-mt-W0u" firstAttribute="centerY" secondItem="7LD-41-bBm" secondAttribute="centerY" id="1z1-Fv-9WP"/>
                                     <constraint firstAttribute="width" constant="75" id="6S1-f9-ffH"/>
                                     <constraint firstAttribute="height" constant="75" id="Jvn-wo-sir"/>
-                                    <constraint firstItem="qNl-mt-W0u" firstAttribute="width" secondItem="7LD-41-bBm" secondAttribute="width" constant="-8" id="RGa-2b-fvo"/>
+                                    <constraint firstItem="qNl-mt-W0u" firstAttribute="width" secondItem="7LD-41-bBm" secondAttribute="width" constant="-2" id="RGa-2b-fvo"/>
                                     <constraint firstItem="qNl-mt-W0u" firstAttribute="centerX" secondItem="7LD-41-bBm" secondAttribute="centerX" id="U74-7U-ayE"/>
-                                    <constraint firstItem="qNl-mt-W0u" firstAttribute="height" secondItem="7LD-41-bBm" secondAttribute="height" constant="-8" id="dvC-5L-YHo"/>
+                                    <constraint firstItem="qNl-mt-W0u" firstAttribute="height" secondItem="7LD-41-bBm" secondAttribute="height" constant="-2" id="dvC-5L-YHo"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -115,6 +115,7 @@
                     </view>
                     <connections>
                         <outlet property="identityView" destination="WlS-Eo-PlC" id="UYK-Yo-d2B"/>
+                        <outlet property="qrView" destination="qNl-mt-W0u" id="2zw-31-P9f"/>
                         <segue destination="KXS-7o-wTm" kind="show" identifier="openScanner" id="V8S-J0-h5B"/>
                     </connections>
                 </viewController>
