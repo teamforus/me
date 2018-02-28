@@ -168,6 +168,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LqG-LH-r8h">
+                                <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7SI-L1-5d2">
+                                <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
+                                <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qNl-mt-W0u">
                                 <rect key="frame" x="4" y="4" width="292" height="292"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -176,14 +184,23 @@
                         <color key="backgroundColor" red="0.51497970410000005" green="0.76755341399999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="qNl-mt-W0u" firstAttribute="width" secondItem="3vM-nJ-Igu" secondAttribute="width" constant="-8" id="5nG-5n-X1L"/>
+                            <constraint firstItem="LqG-LH-r8h" firstAttribute="width" secondItem="3vM-nJ-Igu" secondAttribute="width" id="7fr-Uc-71W"/>
                             <constraint firstItem="qNl-mt-W0u" firstAttribute="centerY" secondItem="3vM-nJ-Igu" secondAttribute="centerY" id="8gG-To-caj"/>
+                            <constraint firstItem="7SI-L1-5d2" firstAttribute="height" secondItem="3vM-nJ-Igu" secondAttribute="height" id="KVs-a3-90A"/>
+                            <constraint firstItem="7SI-L1-5d2" firstAttribute="centerY" secondItem="3vM-nJ-Igu" secondAttribute="centerY" id="LEo-mO-ion"/>
                             <constraint firstItem="qNl-mt-W0u" firstAttribute="height" secondItem="3vM-nJ-Igu" secondAttribute="height" constant="-8" id="agu-lo-c3W"/>
+                            <constraint firstItem="7SI-L1-5d2" firstAttribute="width" secondItem="3vM-nJ-Igu" secondAttribute="width" id="bya-he-hta"/>
+                            <constraint firstItem="LqG-LH-r8h" firstAttribute="centerX" secondItem="3vM-nJ-Igu" secondAttribute="centerX" id="dms-sg-uyJ"/>
                             <constraint firstItem="qNl-mt-W0u" firstAttribute="centerX" secondItem="3vM-nJ-Igu" secondAttribute="centerX" id="kdl-lN-Bbi"/>
+                            <constraint firstItem="7SI-L1-5d2" firstAttribute="centerX" secondItem="3vM-nJ-Igu" secondAttribute="centerX" id="m93-m4-qEx"/>
+                            <constraint firstItem="LqG-LH-r8h" firstAttribute="centerY" secondItem="3vM-nJ-Igu" secondAttribute="centerY" id="p5Z-LM-hW3"/>
+                            <constraint firstItem="LqG-LH-r8h" firstAttribute="height" secondItem="3vM-nJ-Igu" secondAttribute="height" id="tBK-Nk-F34"/>
                         </constraints>
                     </view>
                     <size key="freeformSize" width="300" height="300"/>
                     <connections>
                         <outlet property="qrView" destination="qNl-mt-W0u" id="saN-jq-PHr"/>
+                        <outlet property="scannerView" destination="LqG-LH-r8h" id="eBr-LO-xuT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ce0-3B-cLt" userLabel="First Responder" sceneMemberID="firstResponder"/>

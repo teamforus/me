@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import QRCodeReader
 
-class IdentityViewController: UIViewController {
-    
+class IdentityViewController: UIViewController, QRCodeReaderViewControllerDelegate {
+
     @IBOutlet weak var qrView: UIImageView!
+    @IBOutlet weak var scannerView: UIView!
+    
+    var model: IdentityModel?
     
     func generateQRCode(from string: String) -> UIImage? {
         let data = string.data(using: String.Encoding.ascii)
@@ -54,6 +58,33 @@ class IdentityViewController: UIViewController {
         
     }
     
+    lazy var reader: QRCodeReader = QRCodeReader()
+    func reader(_ reader: QRCodeReaderViewController, didScanResult result: QRCodeReaderResult) {
+        reader.stopScanning()
+        
+        dismiss(animated: true) { [weak self] in
+//            self?.model?.scanResult = result.value
+        }
+    }
+    
+    func readerDidCancel(_ reader: QRCodeReaderViewController) {
+        reader.stopScanning()
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func loadScanner() {
+        guard (model?.checkScanPermissions())!, !reader.isRunning else { return }
+        
+        reader.previewLayer.frame = scannerView.bounds
+        scannerView.layer.addSublayer(reader.previewLayer)
+        
+        reader.startScanning()
+        reader.didFindCode = { result in
+            print(result.value)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -66,6 +97,14 @@ class IdentityViewController: UIViewController {
         
         let newImage = changeColorByTransparent(imgView: qrView, cMask: cMask)
         qrView.image = newImage
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        model = IdentityModel(viewController: self)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        loadScanner()
     }
 
     override func didReceiveMemoryWarning() {

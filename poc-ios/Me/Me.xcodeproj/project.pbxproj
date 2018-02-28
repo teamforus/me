@@ -17,6 +17,7 @@
 		895DA0A320414F4C00AF4C99 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 895DA0A120414F4C00AF4C99 /* Main.storyboard */; };
 		895DA0A520414F4C00AF4C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 895DA0A420414F4C00AF4C99 /* Assets.xcassets */; };
 		895DA0A820414F4C00AF4C99 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 895DA0A620414F4C00AF4C99 /* LaunchScreen.storyboard */; };
+		896F397A2046EE770085C6B1 /* IdentityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896F39792046EE770085C6B1 /* IdentityModel.swift */; };
 		ABA88F631A0F8FFE225940A7 /* Pods_Me.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63CDBC542BB559F6E88E344A /* Pods_Me.framework */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +36,7 @@
 		895DA0A420414F4C00AF4C99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		895DA0A720414F4C00AF4C99 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		895DA0A920414F4C00AF4C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		896F39792046EE770085C6B1 /* IdentityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityModel.swift; sourceTree = "<group>"; };
 		FCAFA64FCF882CB3AE0D451D /* Pods-Me.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Me.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Me/Pods-Me.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -87,6 +89,7 @@
 				894B3D2F2045A668009020D3 /* GlobalFunctions.swift */,
 				894B3D2B2045A2B2009020D3 /* IdentityView.swift */,
 				894B3D312045AAE0009020D3 /* IdentityViewController.swift */,
+				896F39792046EE770085C6B1 /* IdentityModel.swift */,
 				895DA0A420414F4C00AF4C99 /* Assets.xcassets */,
 				895DA0A620414F4C00AF4C99 /* LaunchScreen.storyboard */,
 				895DA0A920414F4C00AF4C99 /* Info.plist */,
@@ -239,6 +242,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				894B3D322045AAE0009020D3 /* IdentityViewController.swift in Sources */,
+				896F397A2046EE770085C6B1 /* IdentityModel.swift in Sources */,
 				894B3D2C2045A2B2009020D3 /* IdentityView.swift in Sources */,
 				894B3D302045A668009020D3 /* GlobalFunctions.swift in Sources */,
 				895DA09E20414F4C00AF4C99 /* AppDelegate.swift in Sources */,
