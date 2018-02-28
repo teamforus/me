@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RecordsViewController: ViewController {
+class RecordsViewController: UIViewController {
     
     @IBOutlet weak var recordsLabel: UILabel!
     

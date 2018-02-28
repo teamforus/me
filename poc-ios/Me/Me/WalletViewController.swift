@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WalletViewController: ViewController {
+class WalletViewController: UIViewController {
 
     @IBOutlet weak var walletLabel: UILabel!
     

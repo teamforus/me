@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         if let string = url.host {
-            print(string)
+            uriMessage = string
             return true
         } else {
             print("returned no string")
