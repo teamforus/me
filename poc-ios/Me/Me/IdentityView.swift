@@ -11,5 +11,7 @@ import UIKit
 class IdentityView: UIView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         identityVC.openIdentityView()
+        
+        mainVC.expandIdentity()
     }
 }

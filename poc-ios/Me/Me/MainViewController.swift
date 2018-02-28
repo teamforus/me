@@ -8,15 +8,20 @@
 
 import UIKit
 
-var mainViewController: MainViewController?
+var mainVC = MainViewController()
 var uriMessage = ""
 
 class MainViewController: UIViewController {
     
+    var identityExpanded = false
+    
+    @IBOutlet weak var identityHeight: NSLayoutConstraint!
+    @IBOutlet weak var identityCenterY: NSLayoutConstraint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        mainViewController = self
+        mainVC = self
     }
     
     @objc func showMessage() {
@@ -31,14 +36,35 @@ class MainViewController: UIViewController {
             }
         }
     }
+    
+    func expandIdentity() {
+        UIView.animate(withDuration: 0.2) {
+            if self.identityExpanded {
+                identityVC.reader.previewLayer.frame = CGRect(x: 0.0, y: 0.0, width: 75, height: 75)
+                identityVC.filterView.alpha = 0.0
+                
+                self.identityHeight.constant = 75
+                self.identityCenterY.constant = 244
+                self.identityExpanded = false
+            } else {
+                identityVC.reader.previewLayer.frame = CGRect(x: 0.0, y: 0.0, width: 200, height: 200)
+                identityVC.filterView.alpha = 0.4
+                
+                self.identityHeight.constant = 200
+                self.identityCenterY.constant = 0
+                self.identityExpanded = true
+            }
+            
+            self.view.layoutIfNeeded()
+        }
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         NotificationCenter.default.addObserver(self, selector:#selector(showMessage), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
         
-        print("hey")
-        
+        identityVC.filterView.alpha = 0.0
     }
     
     override func didReceiveMemoryWarning() {

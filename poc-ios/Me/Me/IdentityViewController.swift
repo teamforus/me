@@ -14,6 +14,7 @@ var identityVC = IdentityViewController()
 class IdentityViewController: UIViewController, QRCodeReaderViewControllerDelegate {
 
     @IBOutlet weak var qrView: UIImageView!
+    @IBOutlet weak var filterView: UIView!
     @IBOutlet weak var scannerView: UIView!
     
     var model: IdentityModel?
@@ -91,7 +92,7 @@ class IdentityViewController: UIViewController, QRCodeReaderViewControllerDelega
     }
     
     func openIdentityView() {
-        print("open idenity view")
+//        print("open idenity view")
     }
     
     override func viewDidLoad() {
