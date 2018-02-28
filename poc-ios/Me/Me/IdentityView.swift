@@ -9,12 +9,7 @@
 import UIKit
 
 class IdentityView: UIView {
-    
-    var vc: MainViewController?
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let vc = mainViewController {
-            vc.performSegue(withIdentifier: "openScanner", sender: self)
-        }
+        identityVC.openIdentityView()
     }
 }

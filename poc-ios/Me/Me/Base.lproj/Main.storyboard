@@ -164,7 +164,7 @@
         <scene sceneID="e4e-sD-0Ts">
             <objects>
                 <viewController id="jc4-oi-lSU" customClass="IdentityViewController" customModule="Me" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="3vM-nJ-Igu">
+                    <view key="view" contentMode="scaleToFill" id="3vM-nJ-Igu" customClass="IdentityView" customModule="Me" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>

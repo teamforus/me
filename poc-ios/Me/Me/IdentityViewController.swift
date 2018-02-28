@@ -9,6 +9,8 @@
 import UIKit
 import QRCodeReader
 
+var identityVC = IdentityViewController()
+
 class IdentityViewController: UIViewController, QRCodeReaderViewControllerDelegate {
 
     @IBOutlet weak var qrView: UIImageView!
@@ -88,6 +90,10 @@ class IdentityViewController: UIViewController, QRCodeReaderViewControllerDelega
         }
     }
     
+    func openIdentityView() {
+        print("open idenity view")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -100,6 +106,8 @@ class IdentityViewController: UIViewController, QRCodeReaderViewControllerDelega
         
         let newImage = changeColorByTransparent(imgView: qrView, cMask: cMask)
         qrView.image = newImage
+        
+        identityVC = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
