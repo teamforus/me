@@ -9,15 +9,63 @@
 import UIKit
 
 class IdentityViewController: UIViewController {
-
-    @IBAction func exit(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+    
+    @IBOutlet weak var qrView: UIImageView!
+    
+    func generateQRCode(from string: String) -> UIImage? {
+        let data = string.data(using: String.Encoding.ascii)
+        
+        if let filter = CIFilter(name: "CIQRCodeGenerator") {
+            filter.setValue(data, forKey: "inputMessage")
+            let transform = CGAffineTransform(scaleX: 50, y: 50)
+            
+            if let output = filter.outputImage?.transformed(by: transform) {
+                return UIImage(ciImage: output)
+            }
+        }
+        
+        return nil
+    }
+    
+    func changeColorByTransparent(imgView: UIImageView, cMask: [CGFloat]) -> UIImage? {
+        
+        var returnImage: UIImage?
+        
+        if let capImage = imgView.image {
+            
+            let sz = capImage.size
+            
+            UIGraphicsBeginImageContextWithOptions(sz, true, 0.0)
+            capImage.draw(in: CGRect(origin: CGPoint.zero, size: sz))
+            let noAlphaImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            let noAlphaCGRef = noAlphaImage?.cgImage
+            
+            if let imgRefCopy = noAlphaCGRef?.copy(maskingColorComponents: cMask) {
+                
+                returnImage = UIImage(cgImage: imgRefCopy)
+                
+            }
+            
+        }
+        
+        return returnImage
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        let tokenQR = self.generateQRCode(from: "hello")
+        self.qrView.image = tokenQR
+        
+        var cMask : [CGFloat] = []
+        
+        cMask = [222, 255, 222, 255, 222, 255]
+        
+        let newImage = changeColorByTransparent(imgView: qrView, cMask: cMask)
+        qrView.image = newImage
     }
 
     override func didReceiveMemoryWarning() {
