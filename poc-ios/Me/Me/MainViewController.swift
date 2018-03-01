@@ -13,8 +13,6 @@ var uriMessage = ""
 
 class MainViewController: UIViewController {
     
-    var identityExpanded = false
-    
     @IBOutlet weak var identityHeight: NSLayoutConstraint!
     @IBOutlet weak var identityCenterY: NSLayoutConstraint!
     
@@ -34,28 +32,6 @@ class MainViewController: UIViewController {
                 
                 uriMessage = ""
             }
-        }
-    }
-    
-    func expandIdentity() {
-        UIView.animate(withDuration: 0.2) {
-            if self.identityExpanded {
-                identityVC.reader.previewLayer.frame = CGRect(x: 0.0, y: 0.0, width: 75, height: 75)
-                identityVC.filterView.alpha = 0.0
-                
-                self.identityHeight.constant = 75
-                self.identityCenterY.constant = 244
-                self.identityExpanded = false
-            } else {
-                identityVC.reader.previewLayer.frame = CGRect(x: 0.0, y: 0.0, width: 200, height: 200)
-                identityVC.filterView.alpha = 0.5
-                
-                self.identityHeight.constant = 200
-                self.identityCenterY.constant = 0
-                self.identityExpanded = true
-            }
-            
-            self.view.layoutIfNeeded()
         }
     }
 

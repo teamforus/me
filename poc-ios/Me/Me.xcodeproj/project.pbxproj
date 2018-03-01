@@ -60,6 +60,43 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		890AAF5920482A5C00AF457C /* Wallet */ = {
+			isa = PBXGroup;
+			children = (
+				894B3D272045A113009020D3 /* WalletViewController.swift */,
+			);
+			path = Wallet;
+			sourceTree = "<group>";
+		};
+		890AAF5A20482A6600AF457C /* Identity */ = {
+			isa = PBXGroup;
+			children = (
+				894B3D312045AAE0009020D3 /* IdentityViewController.swift */,
+				896F39792046EE770085C6B1 /* IdentityModel.swift */,
+				894B3D2B2045A2B2009020D3 /* IdentityView.swift */,
+			);
+			path = Identity;
+			sourceTree = "<group>";
+		};
+		890AAF5B20482A8200AF457C /* Records */ = {
+			isa = PBXGroup;
+			children = (
+				894B3D292045A126009020D3 /* RecordsViewController.swift */,
+			);
+			path = Records;
+			sourceTree = "<group>";
+		};
+		890AAF5C20482A9000AF457C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				895DA09D20414F4C00AF4C99 /* AppDelegate.swift */,
+				895DA0A420414F4C00AF4C99 /* Assets.xcassets */,
+				895DA0A620414F4C00AF4C99 /* LaunchScreen.storyboard */,
+				895DA0A920414F4C00AF4C99 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		895DA09120414F4C00AF4C99 = {
 			isa = PBXGroup;
 			children = (
@@ -82,17 +119,12 @@
 			isa = PBXGroup;
 			children = (
 				895DA0A120414F4C00AF4C99 /* Main.storyboard */,
-				895DA09D20414F4C00AF4C99 /* AppDelegate.swift */,
 				894B3D2D2045A3F2009020D3 /* MainViewController.swift */,
-				894B3D272045A113009020D3 /* WalletViewController.swift */,
-				894B3D292045A126009020D3 /* RecordsViewController.swift */,
+				890AAF5920482A5C00AF457C /* Wallet */,
+				890AAF5A20482A6600AF457C /* Identity */,
+				890AAF5B20482A8200AF457C /* Records */,
 				894B3D2F2045A668009020D3 /* GlobalFunctions.swift */,
-				894B3D312045AAE0009020D3 /* IdentityViewController.swift */,
-				894B3D2B2045A2B2009020D3 /* IdentityView.swift */,
-				896F39792046EE770085C6B1 /* IdentityModel.swift */,
-				895DA0A420414F4C00AF4C99 /* Assets.xcassets */,
-				895DA0A620414F4C00AF4C99 /* LaunchScreen.storyboard */,
-				895DA0A920414F4C00AF4C99 /* Info.plist */,
+				890AAF5C20482A9000AF457C /* Resources */,
 			);
 			path = Me;
 			sourceTree = "<group>";
@@ -388,7 +420,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FNTR3V85ZM;
-				INFOPLIST_FILE = Me/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Me/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.forus.me;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -404,7 +436,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FNTR3V85ZM;
-				INFOPLIST_FILE = Me/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Me/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.forus.me;
 				PRODUCT_NAME = "$(TARGET_NAME)";

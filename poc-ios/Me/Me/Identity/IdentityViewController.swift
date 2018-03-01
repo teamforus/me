@@ -95,6 +95,30 @@ class IdentityViewController: UIViewController, QRCodeReaderViewControllerDelega
 //        print("open idenity view")
     }
     
+    func expand() {
+        UIView.animate(withDuration: 0.2) {
+            if let expanded = identityVC.model?.expanded {
+                if expanded {
+                    identityVC.reader.previewLayer.frame = CGRect(x: 0.0, y: 0.0, width: 75, height: 75)
+                    identityVC.filterView.alpha = 0.0
+                    
+                    mainVC.identityHeight.constant = 75
+                    mainVC.identityCenterY.constant = 244
+                    identityVC.model?.expanded = false
+                } else {
+                    identityVC.reader.previewLayer.frame = CGRect(x: 0.0, y: 0.0, width: 200, height: 200)
+                    identityVC.filterView.alpha = 0.5
+                    
+                    mainVC.identityHeight.constant = 200
+                    mainVC.identityCenterY.constant = 0
+                    identityVC.model?.expanded = true
+                }
+                
+                mainVC.view.layoutIfNeeded()
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

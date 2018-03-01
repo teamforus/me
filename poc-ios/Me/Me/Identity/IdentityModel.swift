@@ -13,6 +13,8 @@ import AVFoundation
 class IdentityModel {
     var viewController: IdentityViewController
     
+    var expanded = false
+    
     func checkScanPermissions() -> Bool {
         do {
             return try QRCodeReader.supportsMetadataObjectTypes()
