@@ -9,12 +9,14 @@
 import UIKit
 
 class WalletViewController: UIViewController {
+    
+    let model = WalletModel()
 
     @IBOutlet weak var walletLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        walletLabel.text = "Loaded Wallet VC"
+        walletLabel.text = model.labelText
     }
 
     override func didReceiveMemoryWarning() {

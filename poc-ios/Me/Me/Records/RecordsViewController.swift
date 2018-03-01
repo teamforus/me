@@ -9,13 +9,14 @@
 import UIKit
 
 class RecordsViewController: UIViewController {
+    let model = RecordsModel()
     
     @IBOutlet weak var recordsLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        recordsLabel.text = "Loaded Records VC"
+        recordsLabel.text = model.labelText
     }
 
     override func didReceiveMemoryWarning() {

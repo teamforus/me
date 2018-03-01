@@ -18,6 +18,8 @@
 		895DA0A520414F4C00AF4C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 895DA0A420414F4C00AF4C99 /* Assets.xcassets */; };
 		895DA0A820414F4C00AF4C99 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 895DA0A620414F4C00AF4C99 /* LaunchScreen.storyboard */; };
 		896F397A2046EE770085C6B1 /* IdentityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896F39792046EE770085C6B1 /* IdentityModel.swift */; };
+		898B86F3204832C100558838 /* WalletModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898B86F2204832C100558838 /* WalletModel.swift */; };
+		898B86F52048333D00558838 /* RecordsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898B86F42048333D00558838 /* RecordsModel.swift */; };
 		ABA88F631A0F8FFE225940A7 /* Pods_Me.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63CDBC542BB559F6E88E344A /* Pods_Me.framework */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +39,8 @@
 		895DA0A720414F4C00AF4C99 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		895DA0A920414F4C00AF4C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		896F39792046EE770085C6B1 /* IdentityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityModel.swift; sourceTree = "<group>"; };
+		898B86F2204832C100558838 /* WalletModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletModel.swift; sourceTree = "<group>"; };
+		898B86F42048333D00558838 /* RecordsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsModel.swift; sourceTree = "<group>"; };
 		FCAFA64FCF882CB3AE0D451D /* Pods-Me.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Me.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Me/Pods-Me.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -64,6 +68,7 @@
 			isa = PBXGroup;
 			children = (
 				894B3D272045A113009020D3 /* WalletViewController.swift */,
+				898B86F2204832C100558838 /* WalletModel.swift */,
 			);
 			path = Wallet;
 			sourceTree = "<group>";
@@ -82,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				894B3D292045A126009020D3 /* RecordsViewController.swift */,
+				898B86F42048333D00558838 /* RecordsModel.swift */,
 			);
 			path = Records;
 			sourceTree = "<group>";
@@ -277,9 +283,11 @@
 				896F397A2046EE770085C6B1 /* IdentityModel.swift in Sources */,
 				894B3D2C2045A2B2009020D3 /* IdentityView.swift in Sources */,
 				894B3D302045A668009020D3 /* GlobalFunctions.swift in Sources */,
+				898B86F52048333D00558838 /* RecordsModel.swift in Sources */,
 				895DA09E20414F4C00AF4C99 /* AppDelegate.swift in Sources */,
 				894B3D2E2045A3F2009020D3 /* MainViewController.swift in Sources */,
 				894B3D282045A113009020D3 /* WalletViewController.swift in Sources */,
+				898B86F3204832C100558838 /* WalletModel.swift in Sources */,
 				894B3D2A2045A126009020D3 /* RecordsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
