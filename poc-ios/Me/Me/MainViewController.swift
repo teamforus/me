@@ -48,7 +48,7 @@ class MainViewController: UIViewController {
                 self.identityExpanded = false
             } else {
                 identityVC.reader.previewLayer.frame = CGRect(x: 0.0, y: 0.0, width: 200, height: 200)
-                identityVC.filterView.alpha = 0.4
+                identityVC.filterView.alpha = 0.5
                 
                 self.identityHeight.constant = 200
                 self.identityCenterY.constant = 0

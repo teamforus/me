@@ -98,7 +98,7 @@ class IdentityViewController: UIViewController, QRCodeReaderViewControllerDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let tokenQR = self.generateQRCode(from: "hello")
+        let tokenQR = self.generateQRCode(from: "0xC2D7CF95645D33006175B78989035C7c9061d3F9")
         self.qrView.image = tokenQR
         
         var cMask : [CGFloat] = []
