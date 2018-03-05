@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Me</string>
+    <string name="navigation_wallet">Wallet</string>
+    <string name="navigation_qr">Me</string>
+    <string name="navigation_records">Records</string>
+    <string name="choose_name">Choose name</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_qr">QrActivity</string>
+    <string name="title_activity_qr_view">QrViewActivity</string>
+</resources>
