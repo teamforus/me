@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WalletViewController: UIViewController {
+class WalletTableViewController: UITableViewController {
     
     let model = WalletModel()
 
@@ -16,7 +16,7 @@ class WalletViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        walletLabel.text = model.labelText
+//        walletLabel.text = model.labelText
     }
 
     override func didReceiveMemoryWarning() {
