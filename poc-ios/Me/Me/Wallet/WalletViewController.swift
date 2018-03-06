@@ -8,10 +8,13 @@
 
 import UIKit
 
+var walletVC = WalletTableViewController()
+
 class WalletTableViewController: UITableViewController {
     
     let model = WalletModel()
-
+    @IBOutlet weak var etherBalance: UILabel!
+    
     @IBAction func Send(_ sender: Any) {
         print("send")
     }
@@ -24,6 +27,9 @@ class WalletTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        walletVC = self
+        
 //        walletLabel.text = model.labelText
     }
 

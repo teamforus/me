@@ -179,6 +179,9 @@
                         </connections>
                     </tableView>
                     <tabBarItem key="tabBarItem" title="Wallet" image="wallet" selectedImage="wallet" id="0f2-g2-RwY"/>
+                    <connections>
+                        <outlet property="etherBalance" destination="JJD-k6-fMd" id="Fic-Ff-nQf"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GNO-pw-Z8Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
