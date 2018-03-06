@@ -7,4 +7,5 @@ target 'Me' do
         pod 'SwiftyJSON'
         pod 'QRCodeReader.swift', '~> 8.1.1'
         pod 'QRCode'
+        pod 'Starscream', '~> 3.0.2'
 end
