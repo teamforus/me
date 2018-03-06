@@ -12,6 +12,14 @@ class WalletTableViewController: UITableViewController {
     
     let model = WalletModel()
 
+    @IBAction func Send(_ sender: Any) {
+        print("send")
+    }
+    
+    @IBAction func request(_ sender: Any) {
+        print("recieve")
+    }
+    
     @IBOutlet weak var walletLabel: UILabel!
     
     override func viewDidLoad() {
