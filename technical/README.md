@@ -13,5 +13,5 @@ Helpful/interesting resources:
 
 * [web3swift](https://github.com/BANKEX/web3swift)
 * [Trust wallet (iOS](https://github.com/TrustWallet/trust-wallet-ios)
-* [Trust wallet (android)](https://github.com/TrustWallet/trust-wallet-android
+* [Trust wallet (android)](https://github.com/TrustWallet/trust-wallet-android)
 * [IRMA: privacy by design](https://github.com/privacybydesign)
