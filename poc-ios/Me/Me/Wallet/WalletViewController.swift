@@ -17,7 +17,7 @@ class WalletTableViewController: UITableViewController {
     
     @IBAction func Send(_ sender: Any) {
         print("send")
-        sendEther()
+//        sendEther(to)
     }
     
     @IBAction func request(_ sender: Any) {
@@ -32,15 +32,13 @@ class WalletTableViewController: UITableViewController {
         walletVC = self
     }
     
-    func sendEther() {
-        let alertController = UIAlertController(title: "Send ether", message: "Fill amount and destination", preferredStyle: .alert)
+    func sendEther(to address: String) {
+        let alertController = UIAlertController(title: "Send ether", message: "Destination:\n\(address)", preferredStyle: .alert)
         
-        
-        let confirmAction = UIAlertAction(title: "Enter", style: .default) { (_) in
+        let confirmAction = UIAlertAction(title: "Send", style: .default) { (_) in
             let amount = alertController.textFields?[0].text
-            let address = alertController.textFields?[1].text
             
-            self.model.performEtherTransaction(destination: address!, amount: amount!)
+            self.model.performEtherTransaction(destination: address, amount: amount!)
         }
         
         //the cancel action doing nothing
@@ -50,13 +48,9 @@ class WalletTableViewController: UITableViewController {
         alertController.addTextField { (textField) in
             textField.placeholder = "Enter amount"
         }
-        alertController.addTextField { (textField) in
-            textField.placeholder = "Enter destination address"
-        }
         
         // set temporary fields
         alertController.textFields?[0].text = model.hardcodedAmount
-        alertController.textFields?[1].text = model.account2Address
         
         //adding the action to dialogbox
         alertController.addAction(confirmAction)

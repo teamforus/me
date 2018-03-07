@@ -18,6 +18,7 @@ class IdentityViewController: UIViewController, QRCodeReaderViewControllerDelega
     @IBOutlet weak var scannerView: UIView!
     
     var model: IdentityModel?
+    var scannerLoaded = false
     
     func generateQRCode(from string: String) -> UIImage? {
         let data = string.data(using: String.Encoding.ascii)
@@ -87,7 +88,9 @@ class IdentityViewController: UIViewController, QRCodeReaderViewControllerDelega
         reader.startScanning()
         reader.didFindCode = { result in
             print(result.value)
-            self.reader.startScanning()
+            self.expand()
+            walletVC.sendEther(to: result.value)
+//            self.reader.startScanning()
         }
     }
     
@@ -96,6 +99,8 @@ class IdentityViewController: UIViewController, QRCodeReaderViewControllerDelega
     }
     
     func expand() {
+        if !scannerLoaded {loadScanner(); scannerLoaded = true}
+        
         UIView.animate(withDuration: 0.2) {
             if let expanded = identityVC.model?.expanded {
                 if expanded {
@@ -112,6 +117,7 @@ class IdentityViewController: UIViewController, QRCodeReaderViewControllerDelega
                     mainVC.identityHeight.constant = 200
                     mainVC.identityCenterY.constant = 0
                     identityVC.model?.expanded = true
+                    self.reader.startScanning()
                 }
                 
                 mainVC.view.layoutIfNeeded()
@@ -140,7 +146,7 @@ class IdentityViewController: UIViewController, QRCodeReaderViewControllerDelega
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        loadScanner()
+//        loadScanner()
     }
 
     override func didReceiveMemoryWarning() {
