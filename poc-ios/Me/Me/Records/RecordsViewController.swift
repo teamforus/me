@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RecordsViewController: UIViewController {
+class RecordsViewController: UITableViewController {
     let model = RecordsModel()
     
     @IBOutlet weak var recordsLabel: UILabel!
@@ -16,7 +16,7 @@ class RecordsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        recordsLabel.text = model.labelText
+//        recordsLabel.text = model.labelText
     }
 
     override func didReceiveMemoryWarning() {

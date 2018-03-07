@@ -2,20 +2,23 @@ PODS:
   - Alamofire (4.4.0)
   - QRCode (2.0)
   - QRCodeReader.swift (8.1.1)
+  - Starscream (3.0.4)
   - SwiftyJSON (4.0.0)
 
 DEPENDENCIES:
   - Alamofire (= 4.4.0)
   - QRCode
   - QRCodeReader.swift (~> 8.1.1)
+  - Starscream (~> 3.0.2)
   - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
   QRCode: f98a1886c8f37523704a7512a4c0cd45b34c18a4
   QRCodeReader.swift: b164a681887de276d405ff02bce854d82cd6360b
+  Starscream: f5da93fe6984c77b694366bf7299b7dc63a76f26
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 61b627e1be2aa2d8f8286cc5550962318704d476
+PODFILE CHECKSUM: 63deefc2071638b5b5940bdadaf4ddf5101a81fb
 
 COCOAPODS: 1.4.0
