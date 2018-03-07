@@ -11,7 +11,12 @@ import Starscream
 import SwiftyJSON
 
 class WalletModel: WebSocketDelegate {
-    var myAccount = "0x7ab7fdd0d2f4fdcf869e28a94b5beceadc680a65"
+    var account1PrivateKey = "0x3897473832ebdbbd3f29f2c9b1e88a7d2fb40c0071dcbc073a3f17889bbac121"
+    var account1Address = "0x7B2aFE6d5E16944084eaA292Ecaa9c3B6469B445"
+    
+    let hardcodedAmount = "2200000000000000"
+    
+    var account2Address = "0xE2028Dbcb6F5EA9Cfba40a777e983A81469D0034"
     
     var labelText = "Loaded Wallet VC"
     
@@ -20,11 +25,12 @@ class WalletModel: WebSocketDelegate {
     func websocketDidConnect(socket: WebSocketClient) {
         print("websocket is connected!")
         
-        getBalance()
-        
+        loadAccount()
+        getBalance(forAccount: account1Address)
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
+        socket.connect()
         print("websocket is disconnected: \(String(describing: error?.localizedDescription))")
     }
     
@@ -33,11 +39,33 @@ class WalletModel: WebSocketDelegate {
     }
     
     func processResponse(response: String) {
+        print("got response: \(response)")
+        
         var responseJSON = JSON.init(parseJSON: response)
         
         if responseJSON["eventName"] == "balance" {
             updateBalance(json: responseJSON)
         }
+    }
+    
+    func loadAccount() {
+        let transaction = """
+        {"eventName":"addAccount","eventData":{"privateKey":"\(account1PrivateKey)"}}
+        """
+        
+        print("loading account: \(transaction)")
+        
+        self.socket.write(string: transaction)
+    }
+    
+    func getBalance(forAccount account: String) {
+        let transaction = """
+            {"eventName":"getBalance","eventData":{"address":"\(account)"}}
+            """
+        
+        print("getting balance: \(transaction)")
+        
+        self.socket.write(string: transaction)
     }
     
     func updateBalance(json: JSON) {
@@ -47,22 +75,25 @@ class WalletModel: WebSocketDelegate {
         walletVC.etherBalance.text = String(roundedBalance)
     }
     
+    func performEtherTransaction(destination: String, amount: String) {
+        let transaction = """
+            {"eventName":"sendEther","eventData":{"from":"0x7B2aFE6d5E16944084eaA292Ecaa9c3B6469B445","to":"\(destination)","amount":"\(amount)"}}
+            """
+        
+        print("performing ether transaction: \(transaction)")
+        
+        self.socket.write(string: transaction)
+    }
+    
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         print("got some data: \(data.count)")
     }
     
     func createAccount() {
         let message = """
-                {"eventName":"createAccount"}
+            {"eventName":"createAccount"}
             """
         
-        self.socket.write(string: message)
-    }
-    
-    func getBalance() {
-        let message = """
-                {"eventName":"getBalance","eventData":{"address":"0x7ab7fdd0d2f4fdcf869e28a94b5beceadc680a65"}}
-            """
         self.socket.write(string: message)
     }
     
