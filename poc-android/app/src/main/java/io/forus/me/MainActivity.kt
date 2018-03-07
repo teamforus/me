@@ -1,6 +1,9 @@
 package io.forus.me
 
+import android.app.Activity
+import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
@@ -10,17 +13,17 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.InputType
 import android.view.MenuItem
-import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import com.google.zxing.integration.android.IntentIntegrator
 import io.forus.me.entities.Record
 import io.forus.me.entities.Account
 import io.forus.me.entities.RecordCategory
+import io.forus.me.entities.Token
 import io.forus.me.views.fragments.WalletFragment
 import io.forus.me.entities.base.WalletItem
-import io.forus.me.services.DatabaseService
-import io.forus.me.services.RecordService
-import io.forus.me.services.ValidationService
+import io.forus.me.helpers.JsonHelper
+import io.forus.me.services.*
 import io.forus.me.views.fragments.RecordsFragment
 import io.forus.me.views.MainPagerAdapter
 import io.forus.me.views.fragments.MeFragment
@@ -33,6 +36,8 @@ class MainActivity :
         RecordsFragment.RecordsListener,
         MeFragment.AccountListener,
         ViewPager.OnPageChangeListener {
+
+    val CURRENT_ACCOUNT_KEY: String = "current_account"
 
     private lateinit var dataThread: DatabaseService.DataThread
     private lateinit var mPager: ViewPager
@@ -51,6 +56,11 @@ class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val currentAccount = this.getCurrentAccountFromSettings()
+        if (currentAccount != null) {
+            AccountService.currentUser = currentAccount
+        }
 
         this.dataThread = DatabaseService.DataThread("DATA_MAIN")
         this.dataThread.start()
@@ -94,6 +104,19 @@ class MainActivity :
         false
     }
 
+    override fun accountSwitchedTo(newContext: Account) {
+
+    }
+
+    fun getCurrentAccountFromSettings(): Account? {
+        val preferences = this.getPreferences(Context.MODE_PRIVATE)
+        val accountId = preferences.getInt(CURRENT_ACCOUNT_KEY, -1)
+        if (accountId >= 0) {
+            return  AccountService.getAccountById(accountId)
+        }
+        return null
+    }
+
     override fun onItemSelect(item: WalletItem) {
         // Todo show wallet item info shenanigans
         debug("Selected: $item")
@@ -133,12 +156,66 @@ class MainActivity :
         alertBuilder.show()
     }
 
+    override fun onNewAccountRequested() {
+        scanCode()
+    }
+
     override fun onPageScrollStateChanged(state: Int) {}
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
     override fun onPageSelected(position: Int) {
         this.setSelectedMenuItem(position)
+    }
+
+    override fun onRequestNewRecord(category: RecordCategory) {
+
+    }
+
+    override fun onRequestNewRecordCategory() {
+        val alertBuilder: AlertDialog.Builder = AlertDialog.Builder(this)
+        alertBuilder.setTitle(R.string.choose_name)
+        val editText = EditText(this)
+        editText.inputType = InputType.TYPE_CLASS_TEXT
+        alertBuilder.setView(editText)
+        alertBuilder.setPositiveButton(R.string.create, {
+            dialog: DialogInterface?, which: Int ->
+            DatabaseService.inject.insert(RecordCategory(editText.text.toString(), AccountService.currentAddress))
+        })
+        alertBuilder.setNegativeButton(R.string.cancel, {
+            dialog: DialogInterface?, which: Int ->
+            dialog!!.cancel()
+        })
+        alertBuilder.show()
+    }
+
+    override fun onRequestNewWalletItem() {
+        scanCode()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        //super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+            val item = JsonHelper.toEthereumItem(result.contents)
+            if (item is Token) {
+                TokenService.addToken(item)
+            }
+        }
+    }
+
+    private fun scanCode() {
+        IntentIntegrator(this).initiateScan()
+        /*val intent: Intent = Intent(this@MainActivity, QrScannerActivity::class.java)
+        startActivityForResult(intent, 2)*/
+    }
+
+    fun setSelectedAccount(accountId: Int) {
+        val preferences = this.getPreferences(Context.MODE_PRIVATE)?:return
+        with (preferences.edit()) {
+            putInt(CURRENT_ACCOUNT_KEY, accountId)
+            commit()
+        }
     }
 
     private fun setSelectedMenuItem(index: Int) {
@@ -160,9 +237,6 @@ class MainActivity :
     private fun showWallet() {
         this.mPager.currentItem = 0
         this.setSelectedMenuItem(0)
-    }
-    override fun accountSwitchedTo(newContext: Account) {
-
     }
 
 }

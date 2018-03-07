@@ -1,5 +1,6 @@
 package io.forus.me.views.fragments
 
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -12,7 +13,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 
 import io.forus.me.R
+import io.forus.me.entities.Token
 import io.forus.me.entities.base.WalletItem
+import io.forus.me.services.AccountService
+import io.forus.me.services.TokenService
 import io.forus.me.services.Web3Service
 
 class WalletFragment : Fragment(), View.OnClickListener {
@@ -21,7 +25,7 @@ class WalletFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         if (this.addButton == view) {
-            Toast.makeText(this.context, "Add button clicked", Toast.LENGTH_LONG).show()
+            this.mListener?.onRequestNewWalletItem()
         }
     }
 
@@ -33,7 +37,15 @@ class WalletFragment : Fragment(), View.OnClickListener {
         // Set the adapter
         if (list is RecyclerView) {
             list.layoutManager = LinearLayoutManager(context)
-            list.adapter = WalletItemView(Web3Service.instance.walletItems, mListener)
+            list.adapter = WalletItemView(mListener)
+            TokenService.getTokensByAccount(AccountService.currentAddress)!!.observe(this, Observer<List<Token>> {
+                tokens: List<Token>? ->
+                run {
+                    if (tokens != null) {
+                        (list.adapter as WalletItemView).walletItems = tokens
+                    }
+                }
+            })
         }
         addButton = view.findViewById(R.id.add_wallet_item_button)
         addButton.setOnClickListener(this)
@@ -43,6 +55,7 @@ class WalletFragment : Fragment(), View.OnClickListener {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         if (context is WalletListener) {
+            this.mListener = context
         } else {
             throw RuntimeException(context!!.toString() + " must implement WalletListener")
         }
@@ -55,5 +68,6 @@ class WalletFragment : Fragment(), View.OnClickListener {
 
     interface WalletListener {
         fun onItemSelect(item: WalletItem)
+        fun onRequestNewWalletItem()
     }
 }
