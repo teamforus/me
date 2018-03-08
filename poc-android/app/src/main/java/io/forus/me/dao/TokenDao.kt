@@ -5,24 +5,21 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
-import io.forus.me.entities.Account
+import io.forus.me.entities.Token
 
 /**
  * Created by martijn.doornik on 05/03/2018.
  */
 
 @Dao
-interface AccountDao {
+interface TokenDao {
 
-    @Query("SELECT * FROM `account` WHERE `id` = :arg0")
-    fun getAccountById(accountId: Int): Account
-
-    @Query("SELECT * FROM `account`")
-    fun getAccounts(): LiveData<List<Account>>
+    @Query("SELECT * FROM `token`")
+    fun getTokens(): LiveData<List<Token>>
 
     @Insert
-    fun create(account: Account)
+    fun insert(token: Token)
 
     @Delete
-    fun delete(account: Account)
+    fun delete(token: Token)
 }

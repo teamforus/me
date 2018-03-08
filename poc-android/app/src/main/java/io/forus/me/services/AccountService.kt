@@ -17,6 +17,10 @@ class AccountService {
                     return ""
                 }
 
+        fun getAccountById(accountId: Int): Account? {
+            return DatabaseService.database?.accountDao()?.getAccountById(accountId)
+        }
+
         fun getAccounts(): LiveData<List<Account>>? {
             return DatabaseService.database?.accountDao()?.getAccounts()
         }

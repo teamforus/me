@@ -9,19 +9,23 @@ import android.os.HandlerThread
 import io.forus.me.dao.AccountDao
 import io.forus.me.dao.RecordCategoryDao
 import io.forus.me.dao.RecordDao
+import io.forus.me.dao.TokenDao
 import io.forus.me.entities.Account
 import io.forus.me.entities.Record
 import io.forus.me.entities.RecordCategory
+import io.forus.me.entities.Token
 import kotlin.concurrent.thread
 
 @Database(entities = arrayOf(
         Account::class,
         Record::class,
-        RecordCategory::class
-        ), version = 2)
+        RecordCategory::class,
+        Token::class
+        ), version = 3)
 abstract class DatabaseService: RoomDatabase() {
     private val ACCOUNT_THREAD: String = "DATA_ACCOUNT"
     private val RECORD_THREAD: String = "DATA_RECORD"
+    private val TOKEN_THREAD: String = "DATA_TOKEN"
 
     private var threads: HashMap<String, DataThread> = HashMap()
 
@@ -42,10 +46,19 @@ abstract class DatabaseService: RoomDatabase() {
                 }
                 return threads[RECORD_THREAD]!!
             }
+    private val tokenThread: DataThread
+        get() {
+            if (!threads.containsKey(TOKEN_THREAD)) {
+                threads[TOKEN_THREAD] = DataThread(TOKEN_THREAD)
+                threads[TOKEN_THREAD]!!.start()
+            }
+            return threads[TOKEN_THREAD]!!
+        }
 
     abstract fun accountDao():AccountDao
     abstract fun recordDao(): RecordDao
     abstract fun recordCategoryDao(): RecordCategoryDao
+    abstract fun tokenDao(): TokenDao
 
     fun delete(account: Account) {
         accountThread.postTask(Runnable { accountDao().delete(account) })
@@ -59,6 +72,10 @@ abstract class DatabaseService: RoomDatabase() {
         recordThread.postTask(Runnable { recordCategoryDao().delete(recordCategory) })
     }
 
+    fun delete(token: Token) {
+        tokenThread.postTask(Runnable { tokenDao().delete(token) })
+    }
+
     fun insert(account: Account) {
         accountThread.postTask(Runnable { accountDao().create(account) })
     }
@@ -69,6 +86,10 @@ abstract class DatabaseService: RoomDatabase() {
 
     fun insert(recordCategory: RecordCategory) {
         recordThread.postTask(Runnable { recordCategoryDao().insert(recordCategory) })
+    }
+
+    fun insert(token: Token) {
+        tokenThread.postTask(Runnable { tokenDao().insert(token) })
     }
 
     companion object {
