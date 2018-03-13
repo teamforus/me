@@ -14,6 +14,9 @@ import io.forus.me.entities.Account
 @Dao
 interface AccountDao {
 
+    @Query("SELECT * FROM `account` WHERE `id` = :arg0")
+    fun getAccountById(accountId: Int): Account
+
     @Query("SELECT * FROM `account`")
     fun getAccounts(): LiveData<List<Account>>
 

@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 
 import io.forus.me.R
+
 import io.forus.me.entities.Record
 import io.forus.me.entities.RecordCategory
 import io.forus.me.services.AccountService
@@ -36,20 +37,7 @@ class RecordsFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         if (view!!.id == mAddButton.id) {
-            val alertBuilder: AlertDialog.Builder = AlertDialog.Builder(this.context)
-            alertBuilder.setTitle(R.string.choose_name)
-            val editText = EditText(this.context)
-            editText.inputType = InputType.TYPE_CLASS_TEXT
-            alertBuilder.setView(editText)
-            alertBuilder.setPositiveButton(R.string.create, {
-                dialog: DialogInterface?, which: Int ->
-                DatabaseService.inject.insert(RecordCategory(editText.text.toString(), AccountService.currentAddress))
-            })
-            alertBuilder.setNegativeButton(R.string.cancel, {
-                dialog: DialogInterface?, which: Int ->
-                dialog!!.cancel()
-            })
-            alertBuilder.show()
+            this.mListener.onRequestNewRecordCategory()
         }
     }
 
@@ -90,6 +78,8 @@ class RecordsFragment : Fragment(), View.OnClickListener {
     interface RecordsListener {
         fun onItemSelect(record: Record)
         fun onCategorySelect(category: RecordCategory)
+        fun onRequestNewRecord(category: RecordCategory)
+        fun onRequestNewRecordCategory()
     }
 
 }

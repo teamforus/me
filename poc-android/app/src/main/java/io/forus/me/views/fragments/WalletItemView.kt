@@ -11,16 +11,16 @@ import io.forus.me.R
 import io.forus.me.views.fragments.WalletFragment.WalletListener
 import io.forus.me.entities.base.WalletItem
 
-class WalletItemView(private val mValues: List<WalletItem>, private val mListener: WalletListener?) : RecyclerView.Adapter<WalletItemView.ViewHolder>() {
+class WalletItemView(private val mListener: WalletListener?, var walletItems: List<WalletItem> = ArrayList()) : RecyclerView.Adapter<WalletItemView.ViewHolder>() {
 
     override fun getItemCount(): Int {
-        return mValues.size
+        return walletItems.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.mItem = mValues[position]
-        holder.mQrView.setImageBitmap(mValues[position].qrCode)
-        holder.mLabelView.text = mValues[position].label
+        holder.mItem = walletItems[position]
+        holder.mQrView.setImageBitmap(walletItems[position].qrCode)
+        holder.mLabelView.text = walletItems[position].label
 
         holder.mView.setOnClickListener {
             mListener?.onItemSelect(holder.mItem as WalletItem)

@@ -31,7 +31,8 @@ class MeFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         if (v?.id == this.mAddButton.id) {
-            AccountService.newAccount("TestAddress", "TestName")
+            this.mListener.onNewAccountRequested()
+            //AccountService.newAccount("TestAddress", "TestName")
         }
     }
 
@@ -60,5 +61,6 @@ class MeFragment : Fragment(), View.OnClickListener {
 
     interface AccountListener {
         fun accountSwitchedTo(newContext: Account)
+        fun onNewAccountRequested()
     }
 }
