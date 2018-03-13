@@ -4,7 +4,6 @@ var meApp = angular.module('meApp', ['ui.router', 'ui.router.state.events']);
 meApp.controller('BaseController', require('./controllers/BaseController'));
 
 // Providers
-// meApp.provider('QrScanner', require('./providers/QrScannerProvider'));
 meApp.provider('ApiRequest', require('./providers/ApiRequestProvider'));
 
 // Directives
@@ -18,9 +17,7 @@ meApp.service('TransactionService', require('./services/TransactionService'));
 meApp.service('QrScannerService', require('./services/QrScannerService'));
 
 // Filters
-// meApp.filter('dateFormat', require('./filters/DateFormatFilter'));
-// meApp.filter('replace', require('./filters/ReplaceFilter'));
-// meApp.filter('sortBy', require('./filters/SortByFilter'));
+// none
 
 // Components
 meApp.component('welcomeComponent', require('./components/WelcomeComponent'));

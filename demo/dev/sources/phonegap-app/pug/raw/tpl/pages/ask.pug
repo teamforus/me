@@ -6,7 +6,7 @@
             .form-error(ng-repeat="err_msg in $ctrl.form.errors.description" ng-bind="err_msg")
         .form-group
             label.form-label AMOUNT
-            input(ng-model="$ctrl.form.values.amount" type="text" placeholder="Fill in Amount").form-control
+            input(ng-model="$ctrl.form.values.amount" type="number" placeholder="Fill in Amount").form-control
             .form-error(ng-repeat="err_msg in $ctrl.form.errors.amount" ng-bind="err_msg")
 
 .view-footer

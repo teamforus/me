@@ -3,12 +3,12 @@ module.exports = {
     controller: [
         '$state',
         '$stateParams',
-        'QrScanner',
+        'QrScannerService',
         'IntentService',
         function(
             $state,
             $stateParams,
-            QrScanner,
+            QrScannerService,
             IntentService,
         ) {
             var ctrl = this;
@@ -17,7 +17,7 @@ module.exports = {
                 return $state.go('send');
             }
 
-            QrScanner.scan().then(function(text) {
+            QrScannerService.scan().then(function(text) {
                 var data = JSON.parse(JSON.stringify($stateParams.data));
 
                 data.address = text;
@@ -34,7 +34,7 @@ module.exports = {
             });
 
             ctrl.$onDestroy = function () {
-                QrScanner.cancelScan(console.log);
+                QrScannerService.cancelScan(console.log);
             };
         }
     ]
