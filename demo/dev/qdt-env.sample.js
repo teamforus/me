@@ -24,6 +24,12 @@ module.exports = {
             "credentials_key": "zuidhorn-front-kindpakket-credentials",
             "winkelierUrl": "https://test.winkelier.forus.io/",
             "kindpakketUrl": "https://test.zuidhorn.forus.io/kindpakket/"
+        },
+        "phonegap": {
+            "apiUrl": "http://kindpakket-api.dev-rminds.nl/api/"
+        },
+        "phonegap-html": {
+            "apiUrl": "http://kindpakket-api.dev-rminds.nl/api/"
         }
     }
 };

@@ -1,6 +1,8 @@
 module.exports = ['$q', function($q) {
     var QrScanner = function() {
+        var html = window.document.querySelector('html');
         this.scan = function() {
+
             return $q(function(resolve, reject) {
                 function runScanner(argument) {
                     // For the best user experience, make sure the user is ready to give your app
@@ -14,6 +16,11 @@ module.exports = ['$q', function($q) {
                             console.error(err);
                         }
                         if (status.authorized) {
+                            html.style.display = 'none';
+
+                            setTimeout(function() {
+                                html.style.display = 'block';
+                            }, 1);
                             // W00t, you have camera access and the scanner is initialized.
                             // QRscanner.show() should feel very fast.
 
@@ -59,11 +66,11 @@ module.exports = ['$q', function($q) {
         };
 
         this.cancelScan = function() {
-            QRScanner.cancelScan(function(status){
+            QRScanner.hide(function(status){
                 console.log(JSON.stringify(status));
             });
 
-            QRScanner.hide(function(status){
+            QRScanner.cancelScan(function(status){
                 console.log(JSON.stringify(status));
             });
         }

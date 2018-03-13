@@ -34,6 +34,8 @@ kindpakketApp.controller('BaseController', [
             AuthService.signOut();
 
             $rootScope.credentials = CredentialsService.get();
+
+            $state.go('landing');
         };
 
         $rootScope.auth.signIn = function(e) {

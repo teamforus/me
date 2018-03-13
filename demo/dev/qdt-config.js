@@ -121,6 +121,9 @@ module.exports = {
                 "from": "../../node_modules/@uirouter/angularjs/release/angular-ui-router.min.js",
                 "to": "assets/dist/@uirouter/angularjs"
             }, {
+                "from": "../../node_modules/@uirouter/angularjs/release/stateEvents.min.js",
+                "to": "assets/dist/@uirouter/angularjs"
+            }, {
                 "from": "../../node_modules/nanoscroller/bin/javascripts/jquery.nanoscroller.js",
                 "to": "assets/dist/nanoscroller"
             }, {
@@ -259,6 +262,9 @@ module.exports = {
                 "to": "assets/dist/angular-sanitize"
             }, {
                 "from": "../../node_modules/@uirouter/angularjs/release/angular-ui-router.min.js",
+                "to": "assets/dist/@uirouter/angularjs"
+            }, {
+                "from": "../../node_modules/@uirouter/angularjs/release/stateEvents.min.js",
                 "to": "assets/dist/@uirouter/angularjs"
             }, {
                 "from": "../../node_modules/nanoscroller/bin/javascripts/jquery.nanoscroller.js",

@@ -1,5 +1,14 @@
 /*==========  Style Sheet - Third-party  ==========*/
 
+html, body.transparent-body, .transparent-body, .transparent-body ion-app, 
+.transparent-body .app-root, .transparent-body ion-nav, 
+.transparent-body .ion-page, .transparent-body .nav-decor, 
+.transparent-body ion-content, .transparent-body .viewscan, 
+.transparent-body .fixed-content, .transparent-body .scroll-content { 
+    background-color: transparent !important; 
+    background: transparent !important;
+}
+
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }

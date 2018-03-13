@@ -11,6 +11,11 @@
 // DEV PAGES
 @import 'includes/dev-pages';
 
+html,
+body {
+    background: transparent;
+}
+
 .button {
     display: inline-block;
     padding: 10px 20px;

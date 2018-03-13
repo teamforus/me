@@ -16,12 +16,12 @@ header.section.section-header: .wrapper
     .section-header-inner(ng-show="!$root.credentials")
         a(href="./").logo: img(src="./assets/img/logo.svg", alt="")
         .section-header-actions
-            a(href="#" ng-click="$root.auth.activateVoucher($event)").button.button-success
+            a(href="#" ng-click="$root.auth.signIn($event)").button.button-white
+                .svg-icon: include ../../../../resources/assets/icons/icon-forus.svg
+                | Log me in
+            a(href="#" ng-click="$root.auth.activateVoucher($event)").button.button-success#activate-button
                 em.mdi.mdi-ticket-confirmation
                 | Activatiecode
-            a(href="#" ng-click="$root.auth.signIn($event)").button.button-white
-                em.mdi.mdi-account
-                | Login
 
     .section-header-placeholder
 

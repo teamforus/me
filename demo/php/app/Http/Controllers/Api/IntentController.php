@@ -25,13 +25,13 @@ class IntentController extends Controller
         }
 
         if ($intent->type == 'voucher') {
-            $intent = collect($intent)->merge([
+            $response = collect($intent)->merge([
                 'voucher' => $authUser->voucher
             ]);
         }
 
         if ($intent->type == 'ask') {
-            $intent = collect($intent)->merge([
+            $response = collect($intent)->merge([
                 'coin' => Coin::whereId($intent->metas()->where([
                     'key' => 'token_id'
                 ])->first()->value)->first(),
@@ -41,7 +41,11 @@ class IntentController extends Controller
             ]);
         }
 
-        return $intent;
+        if ($intent->type == 'auth') {
+            $response = $intent;
+        }
+
+        return $response;
     }
 
     public function accept(Request $request, $intentToken)

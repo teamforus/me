@@ -59,7 +59,7 @@ meApp.component('voucherTransactionComponent', require('./components/VoucherTran
 meApp.config(require('./routes/router.js'));
 
 meApp.config(['ApiRequestProvider', function(ApiRequestProvider) {
-    ApiRequestProvider.setHost('http://kindpakket-api.dev-rminds.nl/api/');
+    ApiRequestProvider.setHost(qdt_c.platform.env_data.apiUrl);
 }]);
 
 meApp.run(['$rootScope', '$state', 'CredentialsService', function($rootScope, $state, CredentialsService) {
