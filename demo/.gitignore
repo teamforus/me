@@ -1,7 +1,3 @@
-# Delete following 2 lines in your own repository
-/dev/sources/*
-!/dev/sources/sample
-
 # Generated in development files #
 /dev/qdt-env.json
 /dev/qdt-env.js
