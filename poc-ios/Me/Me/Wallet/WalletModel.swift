@@ -11,12 +11,13 @@ import Starscream
 import SwiftyJSON
 
 class WalletModel: WebSocketDelegate {
-    var account1PrivateKey = "0x3897473832ebdbbd3f29f2c9b1e88a7d2fb40c0071dcbc073a3f17889bbac121"
-    var account1Address = "0x7B2aFE6d5E16944084eaA292Ecaa9c3B6469B445"
     
-    let hardcodedAmount = "2200000000000000"
+    let privateKey = "0x3897473832ebdbbd3f29f2c9b1e88a7d2fb40c0071dcbc073a3f17889bbac121"
     
-    var account2Address = "0xE2028Dbcb6F5EA9Cfba40a777e983A81469D0034"
+    // destination: 0xDC6AFa0bc952FD8b60e89aA765Dd70EE0C559dc8
+    var address = String()
+    
+    let hardcodedAmount = "200000000000000000"
     
     var labelText = "Loaded Wallet VC"
     
@@ -26,7 +27,6 @@ class WalletModel: WebSocketDelegate {
         print("websocket is connected!")
         
         loadAccount()
-        getBalance(forAccount: account1Address)
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
@@ -43,14 +43,28 @@ class WalletModel: WebSocketDelegate {
         
         var responseJSON = JSON.init(parseJSON: response)
         
+        if responseJSON["eventName"] == "newAccount" {
+            address = String(describing: responseJSON["eventData"]["address"])
+            print("address = \(address)")
+            getBalance(forAccount: address)
+        }
+        
         if responseJSON["eventName"] == "balance" {
             updateBalance(json: responseJSON)
         }
+        
+        if responseJSON["eventName"] == "ipfsAttributeChanged" {
+            displayName(name: "\(responseJSON["eventData"]["attributeValue"])")
+        }
+    }
+    
+    func displayName(name: String) {
+        print("ipfs name: \(name)")
     }
     
     func loadAccount() {
         let transaction = """
-        {"eventName":"addAccount","eventData":{"privateKey":"\(account1PrivateKey)"}}
+        {"eventName":"addAccount","eventData":{"privateKey":"\(privateKey)"}}
         """
         
         print("loading account: \(transaction)")
@@ -60,8 +74,8 @@ class WalletModel: WebSocketDelegate {
     
     func getBalance(forAccount account: String) {
         let transaction = """
-            {"eventName":"getBalance","eventData":{"address":"\(account)"}}
-            """
+        {"eventName":"getBalance","eventData":{"address":"\(account)"}}
+        """
         
         print("getting balance: \(transaction)")
         
@@ -70,17 +84,31 @@ class WalletModel: WebSocketDelegate {
     
     func updateBalance(json: JSON) {
         let balance = json["eventData"]["balance"]
-        let balanceInEther = Double(balance.string!)! / 100000000000000000
-        let roundedBalance = Double(round(1000*balanceInEther)/1000)
-        walletVC.etherBalance.text = String(roundedBalance)
+        if balance != JSON.null {
+            let balanceInEther = Double(balance.string!)! / 1000000000000000000
+            let roundedBalance = Double(round(1000*balanceInEther)/1000)
+            //            walletVC.etherBalance.text = String(describing: roundedBalance)
+        }
     }
     
     func performEtherTransaction(destination: String, amount: String) {
+        print("amount: \(amount)")
+        
         let transaction = """
-            {"eventName":"sendEther","eventData":{"from":"0x7B2aFE6d5E16944084eaA292Ecaa9c3B6469B445","to":"\(destination)","amount":"\(amount)"}}
-            """
+        {"eventName":"sendEther","eventData":{"from":"\(address)","to":"\(destination)","amount":"\(amount)"}}
+        """
         
         print("performing ether transaction: \(transaction)")
+        
+        self.socket.write(string: transaction)
+    }
+    
+    func updateName(name: String) {
+        let transaction = """
+        {"eventName":"setIPFSAttribute","eventData":{"ownerAddress":"0x7B2aFE6d5E16944084eaA292Ecaa9c3B6469B445","identityAddress":"0x6E5D5fda754a18eE47357470D8F553BBd528a3b0","attributeName":"Name","attributeValue":"\(name)"}}
+        """
+        
+        print("performing updateName transaction: \(transaction)")
         
         self.socket.write(string: transaction)
     }
