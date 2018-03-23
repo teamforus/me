@@ -1,7 +1,7 @@
 {
-  "name": "com.phonegap.helloworld",
+  "name": "io.forus.demo.meapp",
   "version": "1.0.0",
-  "displayName": "MeApp",
+  "displayName": "MeApp Demo",
   "cordova": {
     "platforms": [
       "browser",
@@ -22,7 +22,7 @@
       "cordova-plugin-vibration": {},
       "cordova-plugin-qrscanner": {},
       "cordova-plugin-customurlscheme": {
-        "URL_SCHEME": "meapp",
+        "URL_SCHEME": "demomeapp",
         "ANDROID_SCHEME": " ",
         "ANDROID_HOST": " ",
         "ANDROID_PATHPREFIX": "/"

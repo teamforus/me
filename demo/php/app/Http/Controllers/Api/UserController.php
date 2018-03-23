@@ -16,7 +16,8 @@ class UserController extends Controller
         $authUser = $request->get('auth_user');
 
         return collect($authUser)->only([
-            'public_address'
+            'public_address',
+            'stem_points'
         ]);
     }
 

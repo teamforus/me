@@ -9,17 +9,9 @@ module.exports = {
         ) {
             var ctrl = this;
 
-            AuthService.records().then(function(res) {
-                ctrl.records = res.data;
-            }, function(res) {
-                console.log(res.data);
+            AuthService.getUser().then(function(res) {
+                ctrl.stem_points = res.data.stem_points;
             });
-
-            /*AuthService.tokens().then(function(res) {
-                console.log(res.data);
-            }, function(res) {
-                console.log(res.data);
-            });*/
         }
     ]
 };

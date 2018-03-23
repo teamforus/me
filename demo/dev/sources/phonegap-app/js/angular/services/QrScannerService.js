@@ -15,6 +15,7 @@ module.exports = ['$q', function($q) {
                             // here we can handle errors and clean up any loose ends.
                             console.error(err);
                         }
+
                         if (status.authorized) {
                             html.style.display = 'none';
 
@@ -34,6 +35,7 @@ module.exports = ['$q', function($q) {
                                     reject(err);
                                     // an error occurred, or the scan was canceled (error code `6`)
                                 } else {
+                                    navigator.vibrate(250);
                                     resolve(text);
                                 }
                             }

@@ -8,12 +8,6 @@ module.exports = {
             AuthService
         ) {
             var ctrl = this;
-
-            AuthService.records().then(function(res) {
-                console.log(res.data);
-            }, function(res) {
-                console.log(res.data);
-            });
         }
     ]
 };

@@ -115,6 +115,9 @@ module.exports = {
                 "from": "resources/**/*",
                 "to": ""
             }, {
+                "from": "resources/.htaccess",
+                "to": ""
+            }, {
                 "from": "../../node_modules/angular-sanitize/angular-sanitize.min.js",
                 "to": "assets/dist/angular-sanitize"
             }, {
@@ -218,7 +221,7 @@ module.exports = {
                         ],
                         "dest": "/",
                         "name": "app.js",
-                        "minify": false,
+                        "minify": true,
                         "sourcemap": true,
                         "browserify": true
                     }],

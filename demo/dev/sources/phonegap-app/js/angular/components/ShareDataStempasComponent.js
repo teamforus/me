@@ -3,9 +3,11 @@ module.exports = {
     controller: [
         '$state',
         '$stateParams',
+        'CredentialsService',
         function(
             $state,
-            $stateParams
+            $stateParams,
+            CredentialsService
         ) {
             var ctrl = this;
 
@@ -13,9 +15,9 @@ module.exports = {
 
             ctrl.respond = function(accept) {
                 if (accept) {
-                    window.open('stemapp://login', '_system');
+                    window.open('demostemapp://login?accessToken=' + CredentialsService.get(), '_system');
                 } else {
-                    window.open('stemapp://login-declined', '_system');
+                    window.open('demostemapp://login-declined', '_system');
                 }
             };
         }

@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Services\UUIDGeneratorService\Facades\UUIDGenerator;
-use App\Models\UserRecord;
-use App\Models\UserCoin;
-use App\Models\Voucher;
-use App\Models\Record;
-use App\Models\Asset;
-use App\Models\Coin;
 
+/**
+ * Class User
+ * @property Integer $id
+ * @property Integer $stem_points;
+ * @package App\Models
+ */
 class User extends Authenticatable
 {
     use Notifiable;
@@ -22,7 +22,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'email', 'public_address', 'passphrase', 'password', 'access_token'
+        'email', 'public_address', 'passphrase', 'password', 'access_token', 'stem_points'
     ];
 
     /**
@@ -42,11 +42,6 @@ class User extends Authenticatable
     public function user_coins()
     {
         return $this->hasMany(UserCoin::class);
-    }
-
-    public function assets()
-    {
-        return $this->hasMany(Asset::class);
     }
 
     public function voucher()

@@ -17,6 +17,7 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('public_address');
             $table->string('passphrase');
+            $table->integer('stem_points')->default(2);
             $table->string('email')->unique();
             $table->string('access_token');
             $table->string('password');

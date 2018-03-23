@@ -34,7 +34,6 @@ kindpakketApp.config(['$stateProvider', '$urlRouterProvider', '$locationProvider
             url: '/activate-voucher/{activation_token}',
             name: 'activate-voucher',
             controller: ['$scope', '$state', '$rootScope', 'AuthService', 'CredentialsService', function($scope, $state, $rootScope, AuthService, CredentialsService) {
-                console.log($state.params.activation_token);
                 AuthService.activateVoucherToken($state.params.activation_token)
                     .then(function(response) {
                         CredentialsService.set(response.data);

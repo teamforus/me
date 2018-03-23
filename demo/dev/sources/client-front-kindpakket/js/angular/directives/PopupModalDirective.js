@@ -13,11 +13,7 @@ kindpakketApp.directive('popupModal', [
             scope: {
                 modal: "="
             },
-            link: function($scope, iElm, iAttrs, controller) {
-                $scope.$watch('modal', function(n, o ,s) {
-                    console.log(n);
-                });
-            }
+            link: function($scope, iElm, iAttrs, controller) {}
         };
     }
 ]);

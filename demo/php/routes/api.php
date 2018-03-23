@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use  \Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,4 +47,11 @@ Route::group(['prefix' => '/', 'middleware' => ['token.access']], function() {
         Route::post('/ask/accept', 'Api\TransactionController@askAccept');
         Route::post('/ask/decline', 'Api\TransactionController@askDecline');
     });
+
+    Route::post('/votes/{vote}/activate', 'Api\VoteController@activate');
+    Route::post('/votes/{vote}/vote', 'Api\VoteController@vote');
+    Route::get('/votes/active', 'Api\VoteController@active');
+    Route::resource('/votes', 'Api\VoteController', [
+        'only' => ['index', 'show', 'update', 'store', 'destroy']
+    ]);
 });

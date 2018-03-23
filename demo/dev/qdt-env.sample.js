@@ -1,3 +1,5 @@
+const apiUrl = "http://kindpakket-api.dev-rminds.nl/api/";
+
 module.exports = {
     "server": {
         "enabled": true,
@@ -17,19 +19,19 @@ module.exports = {
     "platforms_data": {
         "client-front-kindpakket": {
             "html5Mode": {
-                "enable": false,
+                "enable": true,
                 "basePath": "/"
             },
-            "apiUrl": "http://kindpakket-api.dev-rminds.nl/api/",
+            "apiUrl": apiUrl,
             "credentials_key": "zuidhorn-front-kindpakket-credentials",
             "winkelierUrl": "https://test.winkelier.forus.io/",
             "kindpakketUrl": "https://test.zuidhorn.forus.io/kindpakket/"
         },
         "phonegap": {
-            "apiUrl": "http://kindpakket-api.dev-rminds.nl/api/"
+            "apiUrl": apiUrl
         },
         "phonegap-html": {
-            "apiUrl": "http://kindpakket-api.dev-rminds.nl/api/"
+            "apiUrl": apiUrl
         }
     }
 };
