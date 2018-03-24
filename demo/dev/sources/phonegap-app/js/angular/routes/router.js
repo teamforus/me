@@ -240,7 +240,7 @@ module.exports = ['$stateProvider', function($stateProvider) {
             component: 'shareDataComponent',
             data: {
                 header: {
-                    title: "Kindpakket",
+                    title: "Login",
                     navbar: {
                         text: "",
                         left: {
