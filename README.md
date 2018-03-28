@@ -1,7 +1,9 @@
 
 [![join chat](https://img.shields.io/badge/join%20chat-identity-green.svg)](https://chat.forus.io/channel/identity)
 
-# me-concept
+**note:** work in progress, beware of the dragons 🐉 
+
+# me
 
 me helps you manage your self sovereign identity. Its goal is to enable identity recovery trough delegates, be permissionless and be completely open source. 
 
