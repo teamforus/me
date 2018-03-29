@@ -1,14 +1,10 @@
 package io.forus.me.entities
 
-import android.arch.persistence.room.*
+import android.arch.lifecycle.LiveData
 
-@Entity
 class RecordCategory (
-
-        var label: String = "",
-
-        var account: String = ""
-) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Long? = null
-}
+        val id: Int,
+        val label: String,
+        val identity: String,
+        val records: LiveData<List<Record>>?
+)

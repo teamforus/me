@@ -5,6 +5,8 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import android.graphics.Bitmap
 import com.google.zxing.EncodeHintType
+import io.forus.me.helpers.JsonHelper
+import io.forus.me.helpers.QrHelper
 import net.glxn.qrgen.android.QRCode
 
 /**
@@ -14,13 +16,18 @@ import net.glxn.qrgen.android.QRCode
 abstract class EthereumItem(
         @ColumnInfo(name="address")
         var address: String,
-
-//        @ColumnInfo(name="name")
-        var name: String) {
+        var name: String,
+        var identity: String) {
 
     @PrimaryKey
     var id: Long? = null
 
     val qrCode: Bitmap
-        get() = QRCode.from(this.address).withHint(EncodeHintType.MARGIN, "0").bitmap()
+        get() = QrHelper.getQrBitmap(address)
+
+    companion object {
+        fun fromString(input: String): EthereumItem? {
+            return JsonHelper.toEthereumItem(input)
+        }
+    }
 }

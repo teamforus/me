@@ -11,14 +11,17 @@ import io.forus.me.entities.Asset
  * Created by martijn.doornik on 05/03/2018.
  */
 
-//@Dao
+@Dao
 interface AssetDao {
 
-    @Query("SELECT * FROM `asset`")
-    fun getAssets(): LiveData<List<Asset>>
+    @Query("SELECT * FROM `asset` WHERE `identity` = :arg0")
+    fun getAssets(identity:String): LiveData<List<Asset>>
+
+    @Query("SELECT * FROM `asset` WHERE `address` = :arg0 AND `identity` = :arg1")
+    fun getAssetByAddressByIdentity(address:String, identity: String): Asset
 
     @Insert
-    fun create(asset: Asset)
+    fun insert(asset: Asset)
 
     @Delete
     fun delete(asset: Asset)

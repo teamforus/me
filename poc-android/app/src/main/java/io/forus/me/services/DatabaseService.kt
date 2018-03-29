@@ -4,88 +4,53 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
-import android.os.Handler
-import android.os.HandlerThread
-import io.forus.me.dao.AccountDao
-import io.forus.me.dao.RecordCategoryDao
-import io.forus.me.dao.RecordDao
-import io.forus.me.dao.TokenDao
-import io.forus.me.entities.Account
-import io.forus.me.entities.Record
-import io.forus.me.entities.RecordCategory
-import io.forus.me.entities.Token
-import kotlin.concurrent.thread
+import io.forus.me.dao.*
+import io.forus.me.entities.*
+import io.forus.me.helpers.ThreadHelper
 
 @Database(entities = arrayOf(
-        Account::class,
+        Asset::class,
+        Identity::class,
         Record::class,
-        RecordCategory::class,
+        Service::class,
         Token::class
-        ), version = 3)
+        ), version = 7)
 abstract class DatabaseService: RoomDatabase() {
-    private val ACCOUNT_THREAD: String = "DATA_ACCOUNT"
-    private val RECORD_THREAD: String = "DATA_RECORD"
-    private val TOKEN_THREAD: String = "DATA_TOKEN"
 
-    private var threads: HashMap<String, DataThread> = HashMap()
-
-    private val accountThread: DataThread
-            get() {
-                if (!threads.containsKey(ACCOUNT_THREAD)) {
-                    threads[ACCOUNT_THREAD] = DataThread(ACCOUNT_THREAD)
-                    threads[ACCOUNT_THREAD]!!.start()
-                }
-                return threads[ACCOUNT_THREAD]!!
-            }
-
-    private val recordThread: DataThread
-            get() {
-                if (!threads.containsKey(RECORD_THREAD)) {
-                    threads[RECORD_THREAD] = DataThread(RECORD_THREAD)
-                    threads[RECORD_THREAD]!!.start()
-                }
-                return threads[RECORD_THREAD]!!
-            }
-    private val tokenThread: DataThread
-        get() {
-            if (!threads.containsKey(TOKEN_THREAD)) {
-                threads[TOKEN_THREAD] = DataThread(TOKEN_THREAD)
-                threads[TOKEN_THREAD]!!.start()
-            }
-            return threads[TOKEN_THREAD]!!
-        }
-
-    abstract fun accountDao():AccountDao
+    abstract fun assetDao(): AssetDao
+    abstract fun identityDao(): IdentityDao
     abstract fun recordDao(): RecordDao
-    abstract fun recordCategoryDao(): RecordCategoryDao
+    abstract fun serviceDao(): ServiceDao
     abstract fun tokenDao(): TokenDao
 
-    fun delete(account: Account) {
-        accountThread.postTask(Runnable { accountDao().delete(account) })
+    fun delete(identity: Identity) {
+        identityThread.postTask(Runnable { identityDao().delete(identity) })
     }
 
     fun delete(record: Record) {
         recordThread.postTask(Runnable { recordDao().delete(record) })
     }
 
-    fun delete(recordCategory: RecordCategory) {
-        recordThread.postTask(Runnable { recordCategoryDao().delete(recordCategory) })
-    }
-
     fun delete(token: Token) {
         tokenThread.postTask(Runnable { tokenDao().delete(token) })
     }
 
-    fun insert(account: Account) {
-        accountThread.postTask(Runnable { accountDao().create(account) })
+    fun insert(asset:Asset) {
+        assetThread.postTask(Runnable { assetDao().insert(asset) })
+    }
+
+    fun insert(identity: Identity): Long {
+        var newId:Long = -1
+        identityThread.postTask(Runnable { newId = identityDao().create(identity) })
+        return newId
     }
 
     fun insert(record: Record) {
         recordThread.postTask(Runnable {recordDao().insert(record)})
     }
 
-    fun insert(recordCategory: RecordCategory) {
-        recordThread.postTask(Runnable { recordCategoryDao().insert(recordCategory) })
+    fun insert(service:Service) {
+        serviceThread.postTask(Runnable {serviceDao().insert(service)})
     }
 
     fun insert(token: Token) {
@@ -93,6 +58,20 @@ abstract class DatabaseService: RoomDatabase() {
     }
 
     companion object {
+
+        private val assetThread: ThreadHelper.DataThread
+            get() = ThreadHelper.dispense(ThreadHelper.ASSET_THREAD)
+        private val identityThread: ThreadHelper.DataThread
+            get() = ThreadHelper.dispense(ThreadHelper.IDENTITY_THREAD)
+        private val mainThread: ThreadHelper.DataThread
+            get() = ThreadHelper.dispense(ThreadHelper.MAIN_THREAD)
+        private val recordThread: ThreadHelper.DataThread
+            get() = ThreadHelper.dispense(ThreadHelper.RECORD_THREAD)
+        private val serviceThread: ThreadHelper.DataThread
+            get() = ThreadHelper.dispense(ThreadHelper.SERVICE_THREAD)
+        private val tokenThread: ThreadHelper.DataThread
+            get() = ThreadHelper.dispense(ThreadHelper.TOKEN_THREAD)
+
         var database: DatabaseService? = null
         val ready:Boolean
             get() = database != null
@@ -117,21 +96,13 @@ abstract class DatabaseService: RoomDatabase() {
                     return database!!
                 }
 
-    }
-
-    class DataThread(name: String): HandlerThread(name) {
-        private lateinit var mHandler: Handler
-        private var loaded: Boolean = false
-
-        override fun onLooperPrepared() {
-            super.onLooperPrepared()
-            mHandler = Handler(looper)
-            loaded = true
+        fun prepare(context: Context): DatabaseService {
+            mainThread.postTask(Runnable {
+                this.inject(context)
+            })
+            while (!this.ready) {}
+            return this.inject
         }
 
-        fun postTask(task: Runnable) {
-            while (!loaded) {}
-            mHandler.post(task)
-        }
     }
 }

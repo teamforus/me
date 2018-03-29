@@ -14,8 +14,11 @@ import io.forus.me.entities.Token
 @Dao
 interface TokenDao {
 
-    @Query("SELECT * FROM `token`")
-    fun getTokens(): LiveData<List<Token>>
+    @Query("SELECT * FROM `token` WHERE `identity` = :arg0")
+    fun getTokens(identity: String): LiveData<List<Token>>
+
+    @Query("SELECT * FROM `token` WHERE `address` = :arg0 AND `identity` = :arg1")
+    fun getTokenByAddressByIdentity(address:String, identity: String): Token
 
     @Insert
     fun insert(token: Token)

@@ -1,242 +1,177 @@
 package io.forus.me
 
-import android.app.Activity
-import android.content.Context
-import android.content.DialogInterface
+import android.annotation.TargetApi
+import android.app.Dialog
 import android.content.Intent
+import android.content.res.Resources
+import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
+import android.os.Handler
+import android.support.design.widget.Snackbar
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
-import android.support.v4.view.PagerAdapter
-import android.support.v4.view.ViewPager
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.text.InputType
-import android.view.MenuItem
-import android.widget.EditText
-import android.widget.Toast
-import com.google.zxing.integration.android.IntentIntegrator
+import io.forus.me.entities.Asset
 import io.forus.me.entities.Record
-import io.forus.me.entities.Account
-import io.forus.me.entities.RecordCategory
+import io.forus.me.entities.Service
 import io.forus.me.entities.Token
-import io.forus.me.views.fragments.WalletFragment
-import io.forus.me.entities.base.WalletItem
-import io.forus.me.helpers.JsonHelper
+import io.forus.me.entities.base.EthereumItem
+import io.forus.me.helpers.ThreadHelper
 import io.forus.me.services.*
-import io.forus.me.views.fragments.RecordsFragment
-import io.forus.me.views.MainPagerAdapter
-import io.forus.me.views.fragments.MeFragment
-import io.forus.me.views.transformers.MainTransformer
-import kotlinx.android.synthetic.main.activity_main.*
+import io.forus.me.views.main.MainPager
+import io.forus.me.views.main.MainPagerAdapter
+import io.forus.me.views.me.MeFragment
+import io.forus.me.views.record.RecordsFragment
+import io.forus.me.views.wallet.WalletFragment
 
-class MainActivity :
-        AppCompatActivity(),
-        WalletFragment.WalletListener,
-        RecordsFragment.RecordsListener,
-        MeFragment.AccountListener,
-        ViewPager.OnPageChangeListener {
+import kotlinx.android.synthetic.main.alert_add_qr.*
+import java.util.concurrent.Callable
 
-    val CURRENT_ACCOUNT_KEY: String = "current_account"
 
-    private lateinit var dataThread: DatabaseService.DataThread
-    private lateinit var mPager: ViewPager
-    private lateinit var mPagerAdapter: PagerAdapter
+class MainActivity : AppCompatActivity(), MeFragment.QrListener {
 
-    /**
-     * Shows a toast on the screen for debugging reasons. Remove
-     * on release.
-     *
-     * @param text The text to display on screen.
-      */
-    private fun debug(text: String) {
-        Toast.makeText(this.baseContext, text, Toast.LENGTH_LONG).show()
+    private lateinit var mainPager: MainPager
+    private lateinit var meFragment: MeFragment
+    private lateinit var navigation: TabLayout
+    private lateinit var walletFragment: WalletFragment
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == MainActivity.RequestCode.CREATE_ACCOUNT) {
+            val intent = Intent(this, CreateIdentityActivity::class.java)
+            startActivityForResult(intent, RequestCode.CREATE_IDENTITY)
+        } else if (requestCode == RequestCode.CREATE_IDENTITY) {
+            if (data != null && data.getBooleanExtra(CreateIdentityActivity.Result.IS_FIRST, false)) {
+                val intent = Intent(this, AssignDelegatesActivity::class.java)
+                startActivityForResult(intent, RequestCode.ASSIGN_DELEGATES)
+            }
+        } else if (requestCode == RequestCode.ASSIGN_DELEGATES) {
+            initMainView()
+        }
+    }
+
+    private fun initMainView() {
+        setContentView(R.layout.activity_main)
+        this.mainPager = findViewById(R.id.main_pager)
+        //this.mainPager.setPageTransformer(false, MainTransformer())
+        //this.mainPager.addOnPageChangeListener(this)
+
+        meFragment = MeFragment().with(this).also { it.title = resources.getString(R.string.navigation_qr) }
+        walletFragment = WalletFragment().also { it.title = resources.getString(R.string.navigation_wallet) }
+        val fragments = listOf(
+                walletFragment,
+                meFragment,
+                RecordsFragment().also { it.title = resources.getString(R.string.navigation_records) }
+        )
+        val adapter = MainPagerAdapter(supportFragmentManager, fragments)
+        mainPager.adapter = adapter
+        navigation = findViewById(R.id.navigation)
+        navigation.setupWithViewPager(mainPager)
+        for (i in 0 until navigation.tabCount) {
+            when (i) {
+                MainPager.ME_VIEW -> navigation.getTabAt(i)!!.setIcon(R.drawable.ic_qr_code)
+                MainPager.WALLET_VIEW -> navigation.getTabAt(i)!!.setIcon(R.drawable.ic_account_balance_wallet_black_24dp)
+                MainPager.RECORDS_VIEW -> navigation.getTabAt(i)!!.setIcon(R.drawable.ic_mode_edit_black_24dp)
+            }
+            //navigation.getTabAt(i)!!.icon!!.setTint(resources.getColor(R.color.colorPrimary, theme))
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val currentAccount = this.getCurrentAccountFromSettings()
-        if (currentAccount != null) {
-            AccountService.currentUser = currentAccount
+        var delay = 2200L
+        if (savedInstanceState != null) {
+            delay = 0L
+        } else {
+            setContentView(R.layout.welcome)
         }
-
-        this.dataThread = DatabaseService.DataThread("DATA_MAIN")
-        this.dataThread.start()
-
-        this.dataThread.postTask(Runnable { DatabaseService.inject(this) })
-
-        // Hold the main process until database is loaded.
-        while (!DatabaseService.ready) {}
-
-        this.mPager = findViewById(R.id.main_pager)
-        this.mPager.setPageTransformer(false, MainTransformer())
-        this.mPager.addOnPageChangeListener(this)
-
-        val fragments = ArrayList<Fragment>()
-        fragments.add(0, WalletFragment())
-        fragments.add(1, MeFragment())
-        fragments.add(2, RecordsFragment())
-        this.mPagerAdapter = MainPagerAdapter(supportFragmentManager, fragments)
-        this.mPager.adapter = this.mPagerAdapter
-        this.showMe()
-
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        // Show welcome screen for 1 second
+        Handler().postDelayed({
+            // Require login to continue
+            Web3Service.initialize(this)
+            if (requireLogin()) {
+                // If logged in, show main view; otherwise, this is done in onActivityResult
+                initMainView()
+            }
+        }, delay)
     }
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_wallet -> {
-                this.mPager.currentItem = 0
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_qr -> {
-                this.mPager.currentItem = 1
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_records -> {
-                this.mPager.currentItem = 2
-                return@OnNavigationItemSelectedListener true
-
+    override fun onQrError(code: Int) {
+        when (code) {
+            MeFragment.QrListener.ErrorCode.INVALID_OBJECT -> {
+                Snackbar.make(this.mainPager, "QR Code is ongeldig.", Snackbar.LENGTH_LONG).show()
             }
         }
-        false
-    }
-
-    override fun accountSwitchedTo(newContext: Account) {
-
-    }
-
-    fun getCurrentAccountFromSettings(): Account? {
-        val preferences = this.getPreferences(Context.MODE_PRIVATE)
-        val accountId = preferences.getInt(CURRENT_ACCOUNT_KEY, -1)
-        if (accountId >= 0) {
-            return  AccountService.getAccountById(accountId)
-        }
-        return null
-    }
-
-    override fun onItemSelect(item: WalletItem) {
-        // Todo show wallet item info shenanigans
-        debug("Selected: $item")
-    }
-
-    override fun onItemSelect(record: Record) {
-        // TODO show record stuff
-        debug("Selected: $record")
+        // Make sure the error doesn't happen over and over again
+        Thread.sleep(100)
+        meFragment.resumeScanner()
     }
 
     /**
-     * What to do when tapping a category label.
-     *
-     * @param category The clicked category
+     * Handle the result of a successful scan in the MeFragment class
      */
-    override fun onCategorySelect(category: RecordCategory) {
-        val alertBuilder: AlertDialog.Builder = AlertDialog.Builder(this)
-        alertBuilder.setTitle(R.string.choose_name)
-        val nameText = EditText(this)
-        nameText.inputType = InputType.TYPE_CLASS_TEXT
-        val addressText = EditText(this)
-        addressText.inputType = InputType.TYPE_CLASS_TEXT
-        alertBuilder.setView(nameText)
-        alertBuilder.setPositiveButton(R.string.create, {
-            dialog: DialogInterface?, which: Int ->
-            val address: String = addressText.text.toString()
-            val name: String = nameText.text.toString()
-
-            if (ValidationService.isValidAddress(address)) {
-                RecordService.newRecord(address, name, category)
+    override fun onQrResult(result: EthereumItem) {
+        // TODO Search for duplicates
+        val alert = Dialog(this)//LayoutDialog().with(R.layout.alert_add_qr)
+        alert.setContentView(R.layout.alert_add_qr)
+        alert.alert_add_qr_address.setAddress(result.address)
+        alert.alert_add_qr_text.text = String.format(alert.alert_add_qr_text.text.toString(), result.name)
+        alert.alert_add_qr_add_button.setOnClickListener {
+            if (result is Record) {
+                this.mainPager.currentItem = MainPager.RECORDS_VIEW
+            } else {
+                if (result is Token) {
+                    walletFragment.showTokens()
+                    TokenService.addToken(result)
+                } else if (result is Service) {
+                    walletFragment.showServices()
+                    ServiceService.addService(result)
+                } else if (result is Asset) {
+                    walletFragment.showAssets()
+                    AssetService.addAsset(result)
+                }
+                this.mainPager.currentItem = MainPager.WALLET_VIEW
             }
+            alert.dismiss()
+            meFragment.resumeScanner()
+        }
+        alert.alert_add_qr_cancel_button.setOnClickListener {
+            alert.dismiss()
+            meFragment.resumeScanner()
+        }
+        alert.show()
+    }
+
+    private fun requireLogin(): Boolean {
+        DatabaseService.prepare(this)
+        if (Web3Service.account == null) {
+            val intent = Intent(this, CreateAccountActivity::class.java)
+            startActivityForResult(intent, MainActivity.RequestCode.CREATE_ACCOUNT)
+            return false
+        }
+        val identity = ThreadHelper.await(Callable {
+            IdentityService.loadCurrentIdentity(this)
         })
-        alertBuilder.setNegativeButton(R.string.cancel, {
-            dialog: DialogInterface?, which: Int ->
-            dialog!!.cancel()
-        })
-        alertBuilder.show()
+        if (identity == null) {
+            val intent = Intent(this, CreateIdentityActivity::class.java)
+            startActivityForResult(intent, MainActivity.RequestCode.CREATE_IDENTITY)
+            return false
+        }
+        return true
     }
 
-    override fun onNewAccountRequested() {
-        scanCode()
-    }
-
-    override fun onPageScrollStateChanged(state: Int) {}
-
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-
-    override fun onPageSelected(position: Int) {
-        this.setSelectedMenuItem(position)
-    }
-
-    override fun onRequestNewRecord(category: RecordCategory) {
-
-    }
-
-    override fun onRequestNewRecordCategory() {
-        val alertBuilder: AlertDialog.Builder = AlertDialog.Builder(this)
-        alertBuilder.setTitle(R.string.choose_name)
-        val editText = EditText(this)
-        editText.inputType = InputType.TYPE_CLASS_TEXT
-        alertBuilder.setView(editText)
-        alertBuilder.setPositiveButton(R.string.create, {
-            dialog: DialogInterface?, which: Int ->
-            DatabaseService.inject.insert(RecordCategory(editText.text.toString(), AccountService.currentAddress))
-        })
-        alertBuilder.setNegativeButton(R.string.cancel, {
-            dialog: DialogInterface?, which: Int ->
-            dialog!!.cancel()
-        })
-        alertBuilder.show()
-    }
-
-    override fun onRequestNewWalletItem() {
-        scanCode()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        //super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-            val item = JsonHelper.toEthereumItem(result.contents)
-            if (item is Token) {
-                TokenService.addToken(item)
-            }
+    private class RequestCode {
+        companion object {
+            val CREATE_ACCOUNT: Int = 42
+            val CREATE_IDENTITY: Int = 43
+            val ASSIGN_DELEGATES: Int = 44
         }
     }
 
-    private fun scanCode() {
-        IntentIntegrator(this).initiateScan()
-        /*val intent: Intent = Intent(this@MainActivity, QrScannerActivity::class.java)
-        startActivityForResult(intent, 2)*/
-    }
-
-    fun setSelectedAccount(accountId: Int) {
-        val preferences = this.getPreferences(Context.MODE_PRIVATE)?:return
-        with (preferences.edit()) {
-            putInt(CURRENT_ACCOUNT_KEY, accountId)
-            commit()
+    class ResultCode {
+        companion object {
+            val OK: Int = 1
         }
     }
-
-    private fun setSelectedMenuItem(index: Int) {
-        val navigation: BottomNavigationView = findViewById(R.id.navigation)
-        val view: MenuItem = navigation.menu.getItem(index)
-        navigation.selectedItemId = view.itemId
-    }
-
-    private fun showMe() {
-        this.mPager.currentItem = 1
-        this.setSelectedMenuItem(1)
-    }
-
-    private fun showRecord() {
-        this.mPager.currentItem = 2
-        this.setSelectedMenuItem(2)
-    }
-
-    private fun showWallet() {
-        this.mPager.currentItem = 0
-        this.setSelectedMenuItem(0)
-    }
-
 }

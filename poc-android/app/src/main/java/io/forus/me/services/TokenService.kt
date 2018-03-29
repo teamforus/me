@@ -11,14 +11,16 @@ class TokenService : BaseService() {
 
 
     companion object {
-        val inject: TokenService = TokenService()
-
         fun addToken(token: Token) {
             DatabaseService.inject.insert(token)
         }
 
-        fun getTokensByAccount(account:String): LiveData<List<Token>>? {
-            return DatabaseService.database?.tokenDao()?.getTokens()
+        fun getTokensByIdentity(identity:String): LiveData<List<Token>>? {
+            return DatabaseService.database?.tokenDao()?.getTokens(identity)
+        }
+
+        fun getTokenByAddressByIdentity(address:String, identity:String): Token? {
+            return DatabaseService.database?.tokenDao()?.getTokenByAddressByIdentity(address, identity)
         }
     }
 }

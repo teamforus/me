@@ -27,26 +27,27 @@ class JsonHelper {
     companion object {
 
         fun toEthereumItem(dataString: String): EthereumItem? {
-            val jsonObject: JSONObject = JSONObject(dataString)
-            val address: String = jsonObject.getString(Keys.ADDRESS)
-            val name: String = jsonObject.getString(Keys.NAME)
-            val type: String = jsonObject.getString(Keys.TYPE)
-            when(type) {
-                Keys.ASSET -> {
-                    return Asset(address, name)
+            try {
+                val jsonObject = JSONObject(dataString)
+                val address: String = jsonObject.getString(Keys.ADDRESS)
+                val name: String = jsonObject.getString(Keys.NAME)
+                val type: String = jsonObject.getString(Keys.TYPE)
+                when (type) {
+                    Keys.ASSET -> {
+                        return Asset(address, name)
+                    }
+                    Keys.RECORD -> {
+                        return Record(address, name)
+                    }
+                    Keys.SERVICE -> {
+                        return Service(address, name)
+                    }
+                    Keys.TOKEN -> {
+                        return Token(address, name)
+                    }
                 }
-                Keys.RECORD -> {
-                    return Record(address, name)
-                }
-                Keys.SERVICE -> {
-                    return Service(address, name)
-                }
-                Keys.TOKEN -> {
-                    return Token(address, name)
-                }
-            }
-            // If no return was called, throw invalid json
-            throw JsonHelper.InvalidJsonException(dataString)
+            } catch (e: Exception) {}
+            return null
         }
     }
 
