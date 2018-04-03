@@ -1,0 +1,6 @@
+{
+    "name": "Leeftijd",
+    "type": "record",
+    "key": "age",
+    "category": 1
+}

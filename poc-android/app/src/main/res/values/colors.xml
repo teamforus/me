@@ -10,4 +10,5 @@
     <color name="positive_button_background">@color/colorAccent</color>
     <color name="positive_button_text">@color/white</color>
     <color name="white">#FAFAFA</color>
+    <color name="greyText">#707070</color>
 </resources>

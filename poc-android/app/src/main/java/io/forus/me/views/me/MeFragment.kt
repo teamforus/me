@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,7 +47,9 @@ class MeFragment : TitledFragment() {
                 }
             }
 
-            override fun possibleResultPoints(resultPoints: List<ResultPoint>) {}
+            override fun possibleResultPoints(resultPoints: List<ResultPoint>) {
+                Log.d("MeFragment", resultPoints.size.toString())
+            }
         })
         val button: ImageView = view.findViewById(R.id.myIdentitiesButton)
         button.setOnClickListener {

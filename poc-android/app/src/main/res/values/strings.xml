@@ -14,6 +14,7 @@
     <string name="create">Aanmaken</string>
     <string name="decline">Weigeren</string>
     <string name="do_later">Dit wil ik later doen</string>
+    <string name="history">Geschiedenis</string>
     <string name="i_accept">Dit vind ik goed</string>
     <string name="identity">Profiel</string>
     <string name="identities">Profielen</string>
@@ -25,6 +26,7 @@
     <string name="navigation_qr">Me</string>
     <string name="navigation_records">Eigenschappen</string>
     <string name="navigation_wallet">Eigendommen</string>
+    <string name="overview">Overzicht</string>
     <string name="passphrase">Wachtwoord</string>
     <string name="passphrase_dont_want">Ik wil geen wachtwoord</string>
     <string name="record_personal">Persoonlijk</string>

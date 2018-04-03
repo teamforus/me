@@ -18,14 +18,14 @@ class WalletFragment : TitledFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.wallet_fragment, container, false)
-        val pages = listOf(
+        val pages = listOf<TitledFragment>(
                 TokenFragment().also { it.title = resources.getString(R.string.tab_tokens) },
                 AssetFragment().also { it.title = resources.getString(R.string.tab_assets) },
                 ServiceFragment().also { it.title = resources.getString(R.string.tab_services) }
         )
         navigation = view.findViewById(R.id.navigation_wallet)
         pager = view.findViewById(R.id.wallet_pager)
-        pager.adapter = WalletPagerAdapter(childFragmentManager, pages)
+        pager.adapter = TitledFragmentPagerAdapter(childFragmentManager, pages)
         navigation.setupWithViewPager(pager)
         return view
     }
@@ -40,20 +40,5 @@ class WalletFragment : TitledFragment() {
 
     fun showTokens() {
         this.pager.currentItem = 0
-    }
-
-    class WalletPagerAdapter(fragmentManager: FragmentManager, private val fragments: List<TitledFragment>): FragmentPagerAdapter(fragmentManager) {
-
-        override fun getCount(): Int {
-            return fragments.size
-        }
-        override fun getItem(position: Int): Fragment {
-            return fragments[position]
-        }
-
-        override fun getPageTitle(position: Int): CharSequence? {
-            return fragments[position].title
-        }
-
     }
 }

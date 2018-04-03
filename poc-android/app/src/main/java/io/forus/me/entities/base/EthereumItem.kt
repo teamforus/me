@@ -8,6 +8,7 @@ import com.google.zxing.EncodeHintType
 import io.forus.me.helpers.JsonHelper
 import io.forus.me.helpers.QrHelper
 import net.glxn.qrgen.android.QRCode
+import org.json.JSONObject
 
 /**
  * Created by martijn.doornik on 23/02/2018.
@@ -29,5 +30,9 @@ abstract class EthereumItem(
         fun fromString(input: String): EthereumItem? {
             return JsonHelper.toEthereumItem(input)
         }
+    }
+
+    fun toJson(): JSONObject {
+        return JsonHelper.fromEthereumItem(this)
     }
 }

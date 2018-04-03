@@ -1,10 +1,8 @@
 package io.forus.me.helpers
 
-import io.forus.me.entities.Asset
-import io.forus.me.entities.Record
-import io.forus.me.entities.Service
-import io.forus.me.entities.Token
+import io.forus.me.entities.*
 import io.forus.me.entities.base.EthereumItem
+import io.forus.me.services.RecordService
 import org.json.JSONObject
 
 /**
@@ -15,7 +13,9 @@ class JsonHelper {
         companion object {
             val ADDRESS: String = "address"
             val ASSET: String = "asset"
+            val CATEGORY: String = "category"
             val NAME: String = "name"
+            val KEY: String = "key"
             val RECORD: String = "record"
             val SERVICE: String = "service"
             val TOKEN: String = "token"
@@ -29,27 +29,50 @@ class JsonHelper {
         fun toEthereumItem(dataString: String): EthereumItem? {
             try {
                 val jsonObject = JSONObject(dataString)
-                val address: String = jsonObject.getString(Keys.ADDRESS)
+                var address: String? = null
+                if (jsonObject.has(Keys.ADDRESS)) {
+                    address = jsonObject.getString(Keys.ADDRESS)
+                }
                 val name: String = jsonObject.getString(Keys.NAME)
                 val type: String = jsonObject.getString(Keys.TYPE)
                 when (type) {
                     Keys.ASSET -> {
-                        return Asset(address, name)
+                        return Asset(address!!, name)
                     }
                     Keys.RECORD -> {
-                        return Record(address, name)
+                        val key:String = jsonObject.getString(Keys.KEY)
+                        val category = jsonObject.getInt(Keys.CATEGORY)
+                        if (! RecordService.CategoryIdentifier.list.contains(category)) throw InvalidCategoryException(category)
+                        return Record(key, name, category)
                     }
                     Keys.SERVICE -> {
-                        return Service(address, name)
+                        return Service(address!!, name)
                     }
                     Keys.TOKEN -> {
-                        return Token(address, name)
+                        return Token(address!!, name)
                     }
                 }
             } catch (e: Exception) {}
             return null
         }
-    }
 
+        fun fromEthereumItem(item: EthereumItem): JSONObject {
+            val json = JSONObject()
+            json.put(Keys.NAME, item.name)
+            if (item is Record) {
+                json.put(Keys.KEY, item.key)
+                json.put(Keys.TYPE, Keys.RECORD)
+            } else {
+                json.put(Keys.ADDRESS, item.address)
+                when (item) {
+                    is Asset -> json.put(Keys.TYPE, Keys.ASSET)
+                    is Service -> json.put(Keys.TYPE, Keys.SERVICE)
+                    is Token -> json.put(Keys.TYPE, Keys.TOKEN)
+                }
+            }
+            return json
+        }
+    }
+    class InvalidCategoryException(val givenId:Int): Exception()
     class InvalidJsonException(val jsonString:String): Exception()
 }

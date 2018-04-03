@@ -1,16 +1,11 @@
 package io.forus.me
 
-import android.annotation.TargetApi
 import android.app.Dialog
 import android.content.Intent
-import android.content.res.Resources
-import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import io.forus.me.entities.Asset
 import io.forus.me.entities.Record
@@ -115,28 +110,34 @@ class MainActivity : AppCompatActivity(), MeFragment.QrListener {
         // TODO Search for duplicates
         val alert = Dialog(this)//LayoutDialog().with(R.layout.alert_add_qr)
         alert.setContentView(R.layout.alert_add_qr)
-        alert.alert_add_qr_address.setAddress(result.address)
-        alert.alert_add_qr_text.text = String.format(alert.alert_add_qr_text.text.toString(), result.name)
-        alert.alert_add_qr_add_button.setOnClickListener {
+        alert.nameToolbar.title = result.name
+        alert.alertAddress.setAddress(result.address)
+        alert.alertBody.text = String.format(alert.alertBody.text.toString(), result.name)
+        alert.alertPositiveButton.setOnClickListener {
             if (result is Record) {
+                RecordService.addRecord(result)
                 this.mainPager.currentItem = MainPager.RECORDS_VIEW
             } else {
-                if (result is Token) {
-                    walletFragment.showTokens()
-                    TokenService.addToken(result)
-                } else if (result is Service) {
-                    walletFragment.showServices()
-                    ServiceService.addService(result)
-                } else if (result is Asset) {
-                    walletFragment.showAssets()
-                    AssetService.addAsset(result)
+                when (result) {
+                    is Token -> {
+                        walletFragment.showTokens()
+                        TokenService.addToken(result)
+                    }
+                    is Service -> {
+                        walletFragment.showServices()
+                        ServiceService.addService(result)
+                    }
+                    is Asset -> {
+                        walletFragment.showAssets()
+                        AssetService.addAsset(result)
+                    }
                 }
                 this.mainPager.currentItem = MainPager.WALLET_VIEW
             }
             alert.dismiss()
             meFragment.resumeScanner()
         }
-        alert.alert_add_qr_cancel_button.setOnClickListener {
+        alert.alertCancelButton.setOnClickListener {
             alert.dismiss()
             meFragment.resumeScanner()
         }

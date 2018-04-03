@@ -11,8 +11,11 @@ import io.forus.me.services.RecordService
  */
 @Entity
 class Record(
-        address: String = "0x0",
+        address: String = "key",
         name: String = "",
-        identity:String = IdentityService.currentAddress,
         var recordCategoryId: Int = RecordService.CategoryIdentifier.OTHER,
-        @Ignore var value: String = "") : EthereumItem(address, name, identity)
+        identity:String = IdentityService.currentAddress,
+        @Ignore var value: String = "") : EthereumItem(address, name, identity) {
+    val key:String
+        get() = this.address
+}
