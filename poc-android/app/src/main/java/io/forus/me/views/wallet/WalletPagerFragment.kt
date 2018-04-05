@@ -9,28 +9,32 @@ import android.view.View
 import android.view.ViewGroup
 import io.forus.me.R
 import io.forus.me.WalletItemActivity
-import io.forus.me.entities.Asset
+import io.forus.me.entities.base.WalletItem
 import io.forus.me.views.base.TitledFragment
 
-/**
- * Created by martijn.doornik on 22/03/2018.
- */
-class AssetFragment : TitledFragment(), WalletListAdapter.ItemSelectionListener<Asset> {
+abstract class WalletPagerFragment<T: WalletItem> : TitledFragment(), WalletListAdapter.ItemSelectionListener<T> {
 
-    val adapter = WalletListAdapter(R.layout.asset_list_item_view, this)
+    lateinit var adapter: WalletListAdapter<T>
+
+    abstract fun getLayoutResource(): Int
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.wallet_items_fragment, container, false)
         val listView: RecyclerView = view.findViewById(R.id.wallet_list)
         listView.layoutManager = LinearLayoutManager(context)
+        adapter = WalletListAdapter(this.getLayoutResource(), this)
         listView.adapter = adapter
         return view
     }
 
-    override fun onItemSelect(selected: Asset) {
+    override fun onItemSelect(selected: T) {
         val intent = Intent(this.context, WalletItemActivity::class.java)
         intent.putExtra(WalletItemActivity.WALLET_ITEM_KEY, selected.toJson().toString())
         startActivity(intent)
+    }
+
+    fun setItems(items: List<T>) {
+        adapter.items = items
     }
 
 

@@ -11,12 +11,14 @@ import org.web3j.abi.datatypes.Function
 import org.web3j.crypto.*
 import org.web3j.protocol.Web3j
 import org.web3j.protocol.Web3jFactory
+import org.web3j.protocol.core.DefaultBlockParameter
 import org.web3j.protocol.core.DefaultBlockParameterName
 import org.web3j.protocol.core.RemoteCall
 import org.web3j.protocol.core.methods.request.EthFilter
 import org.web3j.protocol.core.methods.response.*
 import org.web3j.protocol.http.HttpService
 import org.web3j.tx.Contract
+import org.web3j.utils.Numeric
 import rx.Observable
 import rx.Subscriber
 import java.io.File
@@ -48,21 +50,58 @@ internal class Web3Service {
 
         val account:String?
             get() {
-                if (_credentials == null) {
-                    val file = File(walletFileDirectory, ".key")
-                    if (file.exists()) {
-                        _credentials = Credentials.create(Hex.toHexString(file.readBytes()))
-                    }
+                if (credentials != null) {
+                    return credentials!!.address
                 }
-                if (_credentials == null) return null
-                return _credentials!!.address
+                return null
             }
+
+        val credentials: Credentials?
+                get() {
+                    if (_credentials == null) {
+                        val file = File(walletFileDirectory, ".key")
+                        if (file.exists()) {
+                            _credentials = Credentials.create(Hex.toHexString(file.readBytes()))
+                        }
+                    }
+                    if (_credentials == null) return null
+                    return _credentials
+                }
+
+        inline fun <reified Output: Type<Any>>call(address: String, function: String, input: MutableList<Type<Any>>): RemoteCall<Output> {
+            val contract = Web3Contract(address)
+            return contract.callSingleResult(function,input)
+        }
 
         fun deleteAccount() {
             val file = File(walletFileDirectory, ".key")
             if (file.exists()) {
                 file.delete()
             }
+        }
+
+        fun getEther(): BigInteger? {
+            if (credentials != null) {
+                val address = credentials!!.address
+                Log.d("Web3", "Getting ether balance from \"$address\"")
+                val ret = ThreadHelper.await(Callable {
+                    instance.ethGetBalance(credentials!!.address, DefaultBlockParameterName.LATEST).send()
+                })
+                if (ret != null) {
+                    return ret.balance
+                }
+            }
+            return null
+        }
+
+        fun getBytecodeOf(contract:String): String? {
+            val ethGetCode = instance
+                    .ethGetCode(contract, DefaultBlockParameterName.LATEST)
+                    .send()
+            if (ethGetCode.hasError()) {
+                return null
+            }
+            return Numeric.cleanHexPrefix(ethGetCode.code)
         }
 
         fun initialize(context: Context) {
@@ -91,6 +130,9 @@ internal class Web3Service {
 
     class Configuration {
         companion object {
+            val gasPrice = BigInteger.valueOf(18)
+            val gasLimit = BigInteger.valueOf(4712303)
+
             val httpConnectionString:String
                 get() = "http://$ME_NETWORK_LOCATION:$ME_NETWORK_PORT"
             val webSocketConnectionString: String
@@ -105,6 +147,57 @@ internal class Web3Service {
                 return _directoryPrefix + String.format(_wallet_location, network)
             }
         }
+    }
+
+    class Web3Contract constructor(contractAddress: String) : Contract(Web3Service.getBytecodeOf(contractAddress), contractAddress, instance, credentials, Configuration.gasPrice, Configuration.gasLimit) {
+        inline fun <reified T: Type<Any>>callSingleResult(
+                functionName: String,
+                input: MutableList<Type<Any>>
+        ): RemoteCall<T> {
+            val function = Function(
+                    functionName,
+                    input,
+                    listOf(TypeReference.create(T::class.java))
+            )
+            return ThreadHelper.await(Callable {
+                super.executeRemoteCallSingleValueReturn<T>(function)
+            })
+        }
+
+        fun getMessage(): RemoteCall<Utf8String> {
+            val function = Function(
+                    "getMessage",
+                    emptyList(),
+                    listOf(TypeReference.create(Utf8String::class.java)))
+            return ThreadHelper.await(Callable {
+                super.executeRemoteCallSingleValueReturn<Utf8String>(function)
+            })
+        }
+
+        fun setMessage(message:String): RemoteCall<TransactionReceipt> {
+            val function = Function(
+                    "setMessage",
+                    listOf(Utf8String(message)),
+                    emptyList())
+            return executeRemoteCallTransaction(function)
+        }
+
+        val setMessageObservable: Observable<Utf8String>
+            get() {
+                val event = Event("MessageSet", emptyList(), listOf(TypeReference.create(Utf8String::class.java)))
+                val filter = EthFilter(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST, this.contractAddress)
+                filter.addSingleTopic(EventEncoder.encode(event))
+                return this.web3j.ethLogObservable(filter).map<Utf8String> { log ->
+                    val eventValues = this.extractEventParameters(event, log)
+                    eventValues.nonIndexedValues[0] as Utf8String
+
+                }
+
+                /*{log: Log, ret: Utf8String ->
+                    val eventValues = this.extractEventParameters(event, log)
+                    return Utf8String(eventValues.nonIndexedValues[0].value.toString())
+                }*/
+            }
     }
 
     class HelloWorldContract constructor(contractAddress: String, web3j: Web3j, credentials: Credentials, gasPrice: BigInteger, gasLimit: BigInteger) : Contract(BYTECODE, contractAddress, web3j, credentials, gasPrice, gasLimit) {
@@ -199,8 +292,7 @@ internal class Web3Service {
             val message:String
                 get() {
                     return try {
-                        val credentials: Credentials = Credentials.create(privateKey)
-                        val contract = HelloWorldContract(address, instance, credentials, GAS_PRICE, MAX_GAS)
+                        val contract = Web3Contract(address)
                         val result = contract.getMessage().send()
                         result.value
                     } catch (e: Exception) {

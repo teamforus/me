@@ -35,4 +35,10 @@ abstract class EthereumItem(
     fun toJson(): JSONObject {
         return JsonHelper.fromEthereumItem(this)
     }
+
+    /**
+     * Synchronize the Ethereum item with its corresponding network.
+     * @return True is changed, false if not
+     */
+    abstract fun sync(): Boolean
 }

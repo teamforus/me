@@ -20,4 +20,9 @@ class Asset(
 
     override val label: String
             get() = this.name
+
+    override fun sync(): Boolean {
+        // Todo
+        return false
+    }
 }

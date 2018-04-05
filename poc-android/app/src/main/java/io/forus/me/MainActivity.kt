@@ -1,6 +1,7 @@
 package io.forus.me
 
 import android.app.Dialog
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -19,6 +20,7 @@ import io.forus.me.views.main.MainPagerAdapter
 import io.forus.me.views.me.MeFragment
 import io.forus.me.views.record.RecordsFragment
 import io.forus.me.views.wallet.WalletFragment
+import io.forus.me.web3.TokenContract
 
 import kotlinx.android.synthetic.main.alert_add_qr.*
 import java.util.concurrent.Callable
@@ -59,6 +61,31 @@ class MainActivity : AppCompatActivity(), MeFragment.QrListener {
                 meFragment,
                 RecordsFragment().also { it.title = resources.getString(R.string.navigation_records) }
         )
+        // TODO put this garbage somewhere else
+        TokenService.getTokensByIdentity(IdentityService.currentAddress)?.observe(this, Observer {
+            run {
+                if (it != null) {
+                    this.walletFragment.setTokens(it)
+                    val thread = ThreadHelper.dispense(ThreadHelper.TOKEN_THREAD)
+                    Web3Service.getEther()
+                    thread.postTask(Runnable {
+                        var anyChange = false
+                        for (item in it) {
+                            val changed = item.sync()
+                            if (changed) {
+                                DatabaseService.inject.update(item)
+                                anyChange = true
+                            }
+                        }
+                        if (anyChange) this.walletFragment.setTokens(it)
+                        runOnUiThread({
+                            walletFragment.notifyTokensChanged()
+                        })
+                    })
+                }
+            }
+        })
+
         val adapter = MainPagerAdapter(supportFragmentManager, fragments)
         mainPager.adapter = adapter
         navigation = findViewById(R.id.navigation)

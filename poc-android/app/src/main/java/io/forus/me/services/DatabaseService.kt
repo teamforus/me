@@ -14,7 +14,7 @@ import io.forus.me.helpers.ThreadHelper
         Record::class,
         Service::class,
         Token::class
-        ), version = 7)
+        ), version = 8)
 abstract class DatabaseService: RoomDatabase() {
 
     abstract fun assetDao(): AssetDao
@@ -55,6 +55,23 @@ abstract class DatabaseService: RoomDatabase() {
 
     fun insert(token: Token) {
         tokenThread.postTask(Runnable { tokenDao().insert(token) })
+    }
+
+    fun update(asset:Asset) {
+        assetThread.postTask(Runnable { assetDao().update(asset) })
+    }
+
+
+    fun update(record: Record) {
+        recordThread.postTask(Runnable {recordDao().update(record)})
+    }
+
+    fun update(service:Service) {
+        serviceThread.postTask(Runnable {serviceDao().update(service)})
+    }
+
+    fun update(token: Token) {
+        tokenThread.postTask(Runnable { tokenDao().update(token) })
     }
 
     companion object {

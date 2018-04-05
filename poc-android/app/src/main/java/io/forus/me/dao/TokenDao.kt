@@ -1,10 +1,7 @@
 package io.forus.me.dao
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import io.forus.me.entities.Token
 
 /**
@@ -13,6 +10,9 @@ import io.forus.me.entities.Token
 
 @Dao
 interface TokenDao {
+
+    @Delete
+    fun delete(token: Token)
 
     @Query("SELECT * FROM `token` WHERE `identity` = :arg0")
     fun getTokens(identity: String): LiveData<List<Token>>
@@ -23,6 +23,6 @@ interface TokenDao {
     @Insert
     fun insert(token: Token)
 
-    @Delete
-    fun delete(token: Token)
+    @Update
+    fun update(token: Token)
 }

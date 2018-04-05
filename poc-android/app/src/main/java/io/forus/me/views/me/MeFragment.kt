@@ -48,7 +48,7 @@ class MeFragment : TitledFragment() {
             }
 
             override fun possibleResultPoints(resultPoints: List<ResultPoint>) {
-                Log.d("MeFragment", resultPoints.size.toString())
+                // TODO show points on screen for fancy points Log.d("MeFragment", resultPoints.size.toString())
             }
         })
         val button: ImageView = view.findViewById(R.id.myIdentitiesButton)

@@ -36,6 +36,7 @@ class RecordRecyclerAdapter(category: RecordCategory, lifecycleOwner: LifecycleO
     }
 
     override fun onBindViewHolder(holder: RecordViewHolder, position: Int) {
+        records[position].sync()
         holder.nameView.text = records[position].name
         holder.valueView.text = records[position].value
     }

@@ -1,10 +1,7 @@
 package io.forus.me.dao
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import io.forus.me.entities.Asset
 
 /**
@@ -13,6 +10,9 @@ import io.forus.me.entities.Asset
 
 @Dao
 interface AssetDao {
+
+    @Delete
+    fun delete(asset: Asset)
 
     @Query("SELECT * FROM `asset` WHERE `identity` = :arg0")
     fun getAssets(identity:String): LiveData<List<Asset>>
@@ -23,6 +23,6 @@ interface AssetDao {
     @Insert
     fun insert(asset: Asset)
 
-    @Delete
-    fun delete(asset: Asset)
+    @Update
+    fun update(asset: Asset)
 }

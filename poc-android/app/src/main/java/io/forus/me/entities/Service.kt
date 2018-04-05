@@ -13,8 +13,13 @@ class Service(
         address:String = "",
         name: String = "",
         identity:String = IdentityService.currentAddress,
-        @Ignore val value: Int = 0
+        var value: Int = 0
 ) : WalletItem(address, name, identity) {
     override val amount: String
         get() = value.toString() + 'x'
+
+    override fun sync(): Boolean {
+        // todo
+        return false
+    }
 }
