@@ -1,1 +1,1 @@
-knowledge-base/me/README.md
+docs/me/README.md
