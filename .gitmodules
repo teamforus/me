@@ -7,3 +7,6 @@
 [submodule "android"]
 	path = android
 	url = https://github.com/teamforus/me-android.git
+[submodule "iOS"]
+	path = iOS
+	url = https://github.com/teamforus/me-ios
