@@ -1,6 +1,6 @@
 [![join chat](https://img.shields.io/badge/join%19chat-me-green.svg)](https://chat.forus.io/channel/me)
 
-Maintainer | [@jknnr](https://github.com/jknnr)
+Maintainer | [@jamalv](https://github.com/jamalv)
 --- | ---
 
 # me: an app for managing identity, assets and records  
