@@ -66,3 +66,7 @@ To become a self sovereign identity, the technologies being researched are [ethe
 
 As much as possible, we are trying to implement open standards that are embraced by the community. e.g. [ERC20](docs/standards/ERC20.md) for tokens, [ERC721](docs/standards/ERC721.md) for assets, [ERC725](docs/standards/ERC725.md) for identity, [ERC735](docs/standards/ERC735.md) for claims. 
 
+## Tools we use, credits
+| Tool | Credit | 
+| --- | --- |
+| <img src="https://www.browserstack.com/images/layout/browserstack-logo-600x315.png" width="400" /> | Browserstack helps Forus instantly test regressions, reproduce bugs and ensure compatibility. It enables the best browser support. Without it, reproducing and resolving bugs would be much harder. New bugs could be introduced during development without us noticing. We use it everyday! |
