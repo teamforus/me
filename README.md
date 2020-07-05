@@ -5,8 +5,8 @@ Maintainer | [@jamalv](https://github.com/jamalv)
 The Me app is a digital wallet and cash register in one. Applicants use Me to keep coupons. Providers use Me to make payments. In addition, they can log in to Forus without a password.
 
 ## Getting started
-* [Me iOS](https://github.com/teamforus/me-ios)
-* [Me Android](https://github.com/teamforus/me-android)
+* [Me iOS](https://github.com/teamforus/me-ios#getting-started)
+* [Me Android](https://github.com/teamforus/me-android#getting-started)
 
 
 ## Tools we use, credits
